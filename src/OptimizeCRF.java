@@ -1,16 +1,24 @@
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizable.ByGradientValue;
 import cc.mallet.optimize.Optimizer;
+import Microblog.Feature;
+import Microblog.Thread;
 
 
 public class OptimizeCRF implements ByGradientValue {
 
 	double[] params;
+	Thread[] threads;
+	double[] logZ;
 	
-	public OptimizeCRF(double[] init_params, int length) {
-		params = new double[length];
-		for (int i = 0; i < length; i++)
+	public OptimizeCRF(double[] init_params, Thread[] dataset) {
+		params = new double[init_params.length];
+		for (int i = 0; i < init_params.length; i++)
 			params[i] = init_params[i];
+		threads = dataset;
+		logZ = new double[dataset.length];
+		for (int i = 0; i < dataset.length; i++)
+			logZ[i] = getLogPartitionValue(dataset[i]);
 	}
 	
 	@Override
@@ -40,11 +48,37 @@ public class OptimizeCRF implements ByGradientValue {
 			params[i] = new_params[i];
 	}
 
+	double getLogPartitionValue(Thread thread) {
+		// TODO: implement partition function
+		return 0.0;
+	}
+	
 	@Override
 	public double getValue() {
-		double x = params[0];
-		double y = params[1];
-		return -3*x*x - 4*y*y + 2*x - 4*y + 18;
+		double logLH = 0.0;
+		int pt = 0;
+		for (Thread thread : threads) {
+			int pf = 0;
+			double threadSum = 0.0;
+			for (Feature nodeFeature : thread.nodeFeatures) {
+				double featureSum = 0.0;
+				for (double value : nodeFeature.values)
+					featureSum += value;
+				threadSum += params[pf] * featureSum;
+				pf ++;
+			}
+			for (Feature edgeFeature : thread.edgeFeatures) {
+				double featureSum = 0.0;
+				for (double value: edgeFeature.values)
+					featureSum += value;
+				threadSum += params[pf] * featureSum;
+				pf ++;
+			}
+			threadSum -= logZ[pt];
+			pt ++;
+			logLH += threadSum;
+		}
+		return logLH;
 	}
 
 	@Override
