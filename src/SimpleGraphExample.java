@@ -46,6 +46,9 @@ public class SimpleGraphExample {
       Variable v2 = allVars[(i + 1) % allVars.length];
       mdl.addFactor (v1, v2, ptlarr);
     }
+    VarSet varSet = new HashVarSet (new Variable[] { allVars[0] });
+    Factor single = new TableFactor (varSet, new double[]{1.0, 0.0});
+    mdl.addFactor(single);
 
     // STEP 2: Compute marginals
 
