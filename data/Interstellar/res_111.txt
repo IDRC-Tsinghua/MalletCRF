@@ -1,0 +1,5 @@
+{"name": "flypig", "parent": "-1", "number": "0", "label": "0", "mention": ["\u79d1\u5e7b\u4e16\u754c"], "depth": "0", "vector": [[0, 2], [119, 1], [120, 3], [122, 1], [123, 1], [124, 1], [178, 1], [281, 1], [965, 1], [4169, 1]], "hashtag": [], "id": "3778219503199041", "emoji": []}
+{"name": "flypig", "parent": "0", "number": "1", "label": "0", "mention": [], "depth": "1", "vector": [[0, 2], [3, 1], [4, 2], [25, 1], [29, 1], [31, 1], [4171, 1], [4172, 1], [4173, 2], [4174, 1], [4175, 1]], "hashtag": [], "id": "3778219503199041", "emoji": []}
+{"name": "\u7535\u5b50\u9a91\u58eb", "parent": "1", "number": "2", "label": "0", "mention": [], "depth": "2", "vector": [[0, 2], [3, 1], [965, 1], [2291, 1]], "hashtag": [], "id": "3778219503199041", "emoji": []}
+{"name": "driveloco", "parent": "2", "number": "3", "label": "0", "mention": [], "depth": "3", "vector": [[0, 2]], "hashtag": [], "id": "3778219503199041", "emoji": []}
+{"name": "\u8613\u71a0", "parent": "3", "number": "4", "label": "0", "mention": [], "depth": "4", "vector": [[0, 2], [13, 1], [57, 1], [67, 1], [3193, 1]], "hashtag": [], "id": "3778219503199041", "emoji": []}

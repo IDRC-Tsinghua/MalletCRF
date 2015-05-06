@@ -1,0 +1,7 @@
+{"name": "NASA\u4e2d\u6587", "parent": "-1", "number": "0", "label": "0", "mention": [], "depth": "0", "vector": [[0, 2], [8505, 1], [8510, 1]], "hashtag": [], "id": "3784511206380970", "emoji": []}
+{"name": "-Timelesser-", "parent": "0", "number": "1", "label": "0", "mention": [], "depth": "1", "vector": [[0, 2], [29, 1], [31, 1], [5432, 1], [8883, 1]], "hashtag": [], "id": "3784511206380970", "emoji": []}
+{"name": "NASA\u4e2d\u6587", "parent": "0", "number": "2", "label": "0", "mention": [], "depth": "1", "vector": [[0, 2], [223, 1], [1136, 1], [1657, 1], [8505, 1]], "hashtag": [], "id": "3784511206380970", "emoji": []}
+{"name": "Mr_Spy", "parent": "2", "number": "3", "label": "1", "mention": [], "depth": "2", "vector": [[0, 2], [19, 1], [29, 1], [31, 1], [1188, 1]], "hashtag": [], "id": "3784511206380970", "emoji": []}
+{"name": "NASA\u4e2d\u6587", "parent": "2", "number": "4", "label": "0", "mention": [], "depth": "2", "vector": [[0, 2], [1682, 1], [7422, 1], [8506, 1], [8508, 1], [8517, 1], [8884, 1], [8885, 1]], "hashtag": [], "id": "3784511206380970", "emoji": []}
+{"name": "NASA\u4e2d\u6587", "parent": "4", "number": "5", "label": "0", "mention": [], "depth": "3", "vector": [[0, 2], [223, 1], [8510, 1]], "hashtag": [], "id": "3784511206380970", "emoji": []}
+{"name": "Discovery-Y", "parent": "5", "number": "6", "label": "0", "mention": [], "depth": "4", "vector": [[0, 2], [31, 1], [1322, 1]], "hashtag": [], "id": "3784511206380970", "emoji": []}

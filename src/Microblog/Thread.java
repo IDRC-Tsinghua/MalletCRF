@@ -1,11 +1,15 @@
 package Microblog;
 
+import java.util.ArrayList;
+
 public class Thread {
-	public Node[] nodes;
+	public long id;
+	public ArrayList<Node> nodes;
 	public NodeFeature[] nodeFeatures;
 	public EdgeFeature[] edgeFeatures;
 	
-	public Thread() {
-		
+	public Thread(long _id, ArrayList<Node> _nodes) {
+		id = _id;
+		nodes = _nodes;
 	}
 }

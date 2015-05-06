@@ -1,5 +1,44 @@
 package Microblog;
 
-public class Node {
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+public class Node {
+  public String name;
+  public int number;
+  public int depth;
+  public int parent;
+  public int[] children;
+  public int label;
+  public String[] mention;
+  public String[] hashtag;
+  public String[] emoji;
+
+  public Node(JSONObject obj) {
+    try {
+      name = obj.getString("name");
+      parent = Integer.parseInt(obj.getString("parent"));
+      number = Integer.parseInt(obj.getString("number"));
+      label = Integer.parseInt(obj.getString("label")) + 1;
+      depth = Integer.parseInt(obj.getString("depth"));
+      JSONArray mentionArray = obj.getJSONArray("mention");
+      mention = new String[mentionArray.length()];
+      for (int i = 0; i < mentionArray.length(); i++)
+        mention[i] = mentionArray.getString(i);
+      JSONArray hashArray = obj.getJSONArray("hashtag");
+      hashtag = new String[hashArray.length()];
+      for (int i = 0; i < hashArray.length(); i++)
+        hashtag[i] = hashArray.getString(i);
+      JSONArray emojiArray = obj.getJSONArray("emoji");
+      emoji = new String[emojiArray.length()];
+      for (int i = 0; i < emojiArray.length(); i++)
+        emoji[i] = emojiArray.getString(i);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public String toString() {
+    return number + "\t" + name + "\t" + parent;
+  }
 }
