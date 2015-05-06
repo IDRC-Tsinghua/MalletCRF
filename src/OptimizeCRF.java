@@ -81,14 +81,38 @@ public class OptimizeCRF implements ByGradientValue {
 		return logLH;
 	}
 
+	double[] getModelExpec(Thread thread, double[] params){
+		double[] modelExpec = new double[params.length];
+		// TODO: implement model expectation computation with factor graph and TRP.
+		return modelExpec;
+	}
+
 	@Override
 	public void getValueGradient(double[] gradient) {
-		gradient[0] = -6*params[0] + 2;
-		gradient[1] = -8*params[1] - 4;
+		for (int i = 0; i < gradient.length; i++) 
+			gradient[i] = 0.0;
+		for (Thread thread : threads) {
+			double[] modelExpec = getModelExpec(thread, params);
+			for (int i = 0; i < gradient.length; i++) {
+				int n = thread.nodeFeatures.length;
+				if (i < n) {
+					for (double value : thread.nodeFeatures[i].values)
+						gradient[i] += value;
+				} else {
+					for (double value : thread.edgeFeatures[i-n].values)
+						gradient[i] += value;
+				}
+				gradient[i] -= modelExpec[i];
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
-		OptimizeCRF crf = new OptimizeCRF(0, 0);
+		int feature_num = 10;
+		int thread_num = 1000;
+		double[] init_params = new double[feature_num];
+		Thread[] dataset = new Thread[thread_num];
+		OptimizeCRF crf = new OptimizeCRF(init_params, dataset);
 		Optimizer opt = new LimitedMemoryBFGS(crf);
 		
 		boolean converged = false;
