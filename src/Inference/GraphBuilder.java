@@ -1,8 +1,8 @@
 package Inference;
 
+import Microblog.Thread;
 import cc.mallet.grmm.types.FactorGraph;
 import cc.mallet.grmm.types.Variable;
-import Microblog.Thread;
 
 
 public class GraphBuilder {

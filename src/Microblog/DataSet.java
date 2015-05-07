@@ -10,13 +10,13 @@ public class DataSet {
   public String[] edgeFeatureNames;
   public int dualDictLength;
 
-  public DataSet(Thread[] _threads) {
-    dualDictLength = 1000;
-    nodeFeatureNames = new String[]{"NodeEmoji"};
-    edgeFeatureNames = new String[]{"SameAuthor", "Sibling", "Similarity", "Difference",
+  public DataSet(Thread[] threads) {
+    this.dualDictLength = 1000;
+    this.nodeFeatureNames = new String[]{"NodeEmoji"};
+    this.edgeFeatureNames = new String[]{"SameAuthor", "Sibling", "Similarity", "Difference",
         "SentimentProp", "AuthorRef", "HashTag", "SameEmoji", "FollowRoot"};
-    featureNum = nodeFeatureNames.length + edgeFeatureNames.length + dualDictLength;
-    threads = _threads;
+    this.featureNum = nodeFeatureNames.length + edgeFeatureNames.length + dualDictLength;
+    this.threads = threads;
   }
 
   public int getThreadNum() {

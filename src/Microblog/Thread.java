@@ -6,23 +6,26 @@ public class Thread {
 	public long id;
 	public ArrayList<Node> nodes;
 	public NodeFeature[] nodeFeatures;
+	String[] nodeFeatureNames;
 	public EdgeFeature[] edgeFeatures;
+	String[] edgeFeatureNames;
 	private int nodeCount;
 	
-	public Thread(long _id, ArrayList<Node> _nodes) {
-		id = _id;
-		nodes = _nodes;
+	public Thread(long id, ArrayList<Node> nodes) {
+		this.id = id;
+		this.nodes = nodes;
+    this.nodeCount = this.nodes.size();
 	}
 
 	public void setNodeNames(String[] featureNames) throws ClassNotFoundException {
-
 		this.nodeFeatureNames = featureNames;
 		Class featureClass = Feature.class;
-		for(int i=0; i<featureNames.length; i++) {
+		for(int i = 0; i < featureNames.length; i++) {
 			Class c = Class.forName(featureNames[i]);
 			Object featureObj = c.getInterfaces();
 			this.nodeFeatures[i] = (NodeFeature)featureObj;
 		}
+    // TODO: add WordFeature separately
 	}
 
 	public void setEdgeFeatures(String[] featureNames) throws ClassNotFoundException {
@@ -45,8 +48,7 @@ public class Thread {
 
 	public void extractEdgeFeatures() {
 		for(int i=0; i<this.edgeFeatures.length; i++) {
-
-			this.edgeFeautures[i].extract(this.nodes);
+			this.edgeFeatures[i].extract(this.nodes);
 		}
 	}
 
