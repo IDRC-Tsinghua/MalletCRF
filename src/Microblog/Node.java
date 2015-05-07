@@ -13,6 +13,7 @@ public class Node {
   public String[] mention;
   public String[] hashtag;
   public String[] emoji;
+  public int[] word;
 
   public Node(JSONObject obj) {
     try {
@@ -33,6 +34,14 @@ public class Node {
       emoji = new String[emojiArray.length()];
       for (int i = 0; i < emojiArray.length(); i++)
         emoji[i] = emojiArray.getString(i);
+      /*JSONArray childrenArray = obj.getJSONArray("children");
+      children = new int[childrenArray.length()];
+      for (int i = 0; i < childrenArray.length(); i++)
+        children[i] = childrenArray.getInt(i);
+      JSONArray wordArray = obj.getJSONArray("vector");
+      word = new int[wordArray.length()];
+      for (int i = 0; i < wordArray.length(); i++)
+        word[i] = wordArray.getInt(i);*/
     } catch (Exception e) {
       e.printStackTrace();
     }
