@@ -9,7 +9,10 @@ abstract public class EdgeFeature extends Feature {
 }
 
 class SameAuthor extends EdgeFeature {
-	String name = "SameAuthor";
+
+  public SameAuthor() {
+    this.name =  "SameAuthor";
+  }
 
 	public void extract(ArrayList<Node> nodes) {
 		// compute x and values
@@ -36,7 +39,10 @@ class SameAuthor extends EdgeFeature {
 }
 
 class Similarity extends EdgeFeature {
-	String name = "Similarity";
+
+  public Similarity() {
+    this.name = "Similarity";
+  }
 
 	public void extract(ArrayList<Node> nodes) {
 		// compute x and values
@@ -64,7 +70,10 @@ class Similarity extends EdgeFeature {
 }
 
 class Difference extends EdgeFeature {
-	String name = "Difference";
+
+  public Difference() {
+    this.name = "Difference";
+  }
 
 	public void extract(ArrayList<Node> nodes) {
 		// compute x and values
@@ -95,7 +104,10 @@ class Difference extends EdgeFeature {
 }
 
 class SentimentProp extends EdgeFeature {
-	String name = "SentimentProp";
+
+  public SentimentProp() {
+    this.name = "SentimentProp";
+  }
 
 	public void extract(ArrayList<Node> nodes) {
 		// compute x and values
@@ -120,7 +132,10 @@ class SentimentProp extends EdgeFeature {
 }
 
 class AuthorRef extends EdgeFeature {
-	String name = "AuthorRef";
+
+  public AuthorRef() {
+    this.name = "AuthorRef";
+  }
 
 	public void extract(ArrayList<Node> nodes) {
 		// compute x and values
@@ -147,7 +162,10 @@ class AuthorRef extends EdgeFeature {
 }
 
 class HashTag extends EdgeFeature {
-	String name = "HashTag";
+
+  public HashTag() {
+    this.name = "HashTag";
+  }
 
 	public void extract(ArrayList<Node> nodes) {
 		// compute x and values
@@ -177,7 +195,10 @@ class HashTag extends EdgeFeature {
 }
 
 class SameEmoji extends EdgeFeature {
-	String name = "SameEmoji";
+
+  public SameEmoji() {
+    this.name = "SameEmoji";
+  }
 
 	public void extract(ArrayList<Node> nodes) {
 		// compute x and values
@@ -207,7 +228,10 @@ class SameEmoji extends EdgeFeature {
 }
 
 class FollowRoot extends EdgeFeature {
-	String name = "HashTag";
+
+  public FollowRoot() {
+    this.name = "FollowRoot";
+  }
 
 	public void extract(ArrayList<Node> nodes) {
 		// compute x and values

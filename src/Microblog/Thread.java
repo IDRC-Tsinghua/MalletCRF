@@ -75,9 +75,9 @@ public class Thread {
 	public void showFeatureValues() {
 		if (this.nodeFeatures != null && this.edgeFeatures != null) {
 			for (NodeFeature nodefeature : this.nodeFeatures)
-				System.out.println(nodefeature.name + ": " + Arrays.toString(nodefeature.values));
+				System.out.println(nodefeature.name + ": " + Arrays.toString(nodefeature.x));
 			for (EdgeFeature edgefeature : this.edgeFeatures)
-        System.out.println(edgefeature.name + ": " + Arrays.toString(edgefeature.values));
+        System.out.println(edgefeature.name + ": " + Arrays.toString(edgefeature.x));
 		} else {
 			System.out.println("Features not defined or extracted");
 		}

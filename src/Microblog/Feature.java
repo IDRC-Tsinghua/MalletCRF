@@ -7,8 +7,8 @@ import java.util.HashSet;
 abstract public class Feature {
 	String name = "Feature";
 	int choiceNum = 2;
-	double simThreshold = 0.1;
-	double diffThreshold = 0;
+	double simThreshold = 0.4;
+	double diffThreshold = 0.2;
 	public int[] x;
 	public double[] values;
 	public double[][] potentials;

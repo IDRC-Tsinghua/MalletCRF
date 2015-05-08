@@ -7,8 +7,11 @@ abstract public class NodeFeature extends Feature {
 }
 
 class NodeEmoji extends NodeFeature {
-  String name = "NodeEmoji";
-  int choiceNum = 3; // different from other features
+
+  public NodeEmoji() {
+    this.name = "NodeEmoji";
+    this.choiceNum = 3; // different from other features
+  }
 
   public void extract(ArrayList<Node> nodes) {
     // compute x and values
