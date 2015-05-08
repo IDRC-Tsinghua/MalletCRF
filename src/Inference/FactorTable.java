@@ -9,6 +9,32 @@ import cc.mallet.grmm.types.Variable;
 
 public class FactorTable {
 
+
+    public void WordPolarityFactor(FactorGraph mdl) {
+
+        /*
+                  word          y                 p
+                   0            0        0       1/3
+		 *         0            1                 0
+		 *         0            2                 0
+		 *         1            0                 0
+		 *         1            1        1       1/3
+		 *         1            2                 0
+		 *         2            0                 0
+		 *         2            1                 0
+		 *         2            2        2       1/3
+         */
+        VarSet varSet = new HashVarSet(new Variable[] {
+                new Variable(3),
+                new Variable(3)
+        });
+        double[] res = new double[] {1/3, 0, 0, 0, 1/3, 0, 0, 0, 1/3};
+        Factor factor = new TableFactor(varSet, res);
+        mdl.addFactor(factor);
+    }
+
+
+
 	public void RootFeatureFactor(FactorGraph mdl) {
 		
 		/*    node_label   root_label    y
@@ -29,7 +55,10 @@ public class FactorTable {
 				new Variable(3)	 // root label	
 		});
 
-		double[] res = new double[] {1, 0, 0, 0, 1, 0, 0, 0, 1};
+        double averageProb = 1 / 9;
+        double[] res = new double[9];
+        for (int i = 0; i < res.length; i++)
+            res[i] = averageProb;
 		Factor factor = new TableFactor(varSet, res);
 		mdl.addFactor(factor);
 	}
@@ -37,7 +66,7 @@ public class FactorTable {
 	public void ParentFeatureFactor(FactorGraph mdl) {
 		
 		/*    node_label   parent_label  y     p
-		 *         0            0        1     1/3
+		 *         0            0        1     1/9
 		 *         0            1        0
 		 *         0            2        0 
 		 *         1            0        0
@@ -48,18 +77,19 @@ public class FactorTable {
 		 *         2            2        1
 		 * 
 		 */
-		
-		VarSet varSet = new HashVarSet(new Variable[] {
-				new Variable(3), // node label
-				new Variable(3)	 // parent label	
-		});
+
+        VarSet varSet = new HashVarSet(new Variable[]{
+                new Variable(3), // node label
+                new Variable(3)     // parent label
+        });
 
         double averageProb = 1 / 9;
 
-		double[] res = new double[] {1, 0, 0, 0, 1, 0, 0, 0, 1};
-		Factor factor = new TableFactor(varSet, res);
-		mdl.addFactor(factor);
-	}
+        double[] res = new double[9];
+        for (int i = 0; i < res.length; i++)
+            res[i] = averageProb;
 
-
+        Factor factor = new TableFactor(varSet, res);
+        mdl.addFactor(factor);
+    }
 }
