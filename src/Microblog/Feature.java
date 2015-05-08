@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-abstract class Feature {
+abstract public class Feature {
 	String name = "Feature";
 	int choiceNum = 2;
 	double simThreshold = 0.1;

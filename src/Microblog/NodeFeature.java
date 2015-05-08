@@ -2,7 +2,7 @@ package Microblog;
 
 import java.util.ArrayList;
 
-abstract class NodeFeature extends Feature {
+abstract public class NodeFeature extends Feature {
 	String name = "NodeFeature";
 }
 

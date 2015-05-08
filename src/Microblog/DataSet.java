@@ -1,8 +1,5 @@
 package Microblog;
 
-/**
- * Created by wyc on 2015/5/7.
- */
 public class DataSet {
   public Thread[] threads;
   public int featureNum;
@@ -20,5 +17,18 @@ public class DataSet {
 
   public int getThreadNum() {
     return threads.length;
+  }
+
+  public void extractFeatures() {
+    for (Thread thread : this.threads) {
+      try {
+        thread.setNodeFeatures(this.nodeFeatureNames);
+        thread.setEdgeFeatures(this.edgeFeatureNames);
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
+      thread.extractFeatures();
+      thread.showFeatureValues();
+    }
   }
 }
