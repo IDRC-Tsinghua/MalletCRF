@@ -41,7 +41,7 @@ public class WordFeature extends NodeFeature {
       }
     }
     // compute potentials
-    this.potentials = new double[nodes.size()][6];
+    this.potentials = new double[nodes.size()][this.choiceNum*3];
     for (int n = 0; n < nodes.size(); n++) {
       // potentials should be all 0.0 as default
       switch (this.polarity) {
