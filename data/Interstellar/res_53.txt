@@ -1,0 +1,4 @@
+{"name": "\u4e00\u53ea\u4e09\u4e01\u5305", "parent": "-1", "number": "0", "label": "1", "mention": [], "depth": "0", "vector": [[0, 2], [2, 3], [78, 1], [429, 1], [439, 1], [567, 1], [1485, 1], [1498, 1], [2462, 1]], "hashtag": [], "id": "3776947085508163", "emoji": []}
+{"name": "\u61d2\u5f97\u6ce8\u518c", "parent": "0", "number": "1", "label": "0", "mention": [], "depth": "1", "vector": [[0, 2], [21, 1], [145, 1], [2463, 1], [2464, 1]], "hashtag": [], "id": "3776947085508163", "emoji": []}
+{"name": "AC\u963f\u5e03", "parent": "1", "number": "2", "label": "0", "mention": [], "depth": "2", "vector": [[0, 2], [21, 1], [1391, 1], [2465, 1], [2466, 1]], "hashtag": [], "id": "3776947085508163", "emoji": []}
+{"name": "\u806a\u660e\u7684\u4e00\u53d4", "parent": "2", "number": "3", "label": "0", "mention": [], "depth": "3", "vector": [[0, 2], [29, 1], [31, 1]], "hashtag": [], "id": "3776947085508163", "emoji": []}

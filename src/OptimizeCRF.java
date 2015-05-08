@@ -1,3 +1,7 @@
+import java.lang.*;
+
+import Microblog.DataReader;
+import Microblog.DataSet;
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizable.ByGradientValue;
 import cc.mallet.optimize.Optimizer;
@@ -108,11 +112,13 @@ public class OptimizeCRF implements ByGradientValue {
 	}
 	
 	public static void main(String[] args) {
-		int feature_num = 10;
-		int thread_num = 1000;
-		double[] init_params = new double[feature_num];
-		Thread[] dataset = new Thread[thread_num];
-		OptimizeCRF crf = new OptimizeCRF(init_params, dataset);
+		DataReader dataReader = new DataReader();
+		Thread[] threads = dataReader.readData("data/Interstellar");
+		DataSet dataset = new DataSet(threads);
+		System.out.println(dataset.getThreadNum());
+		double[] init_params = new double[dataset.featureNum];
+
+		/*OptimizeCRF crf = new OptimizeCRF(init_params, dataset);
 		Optimizer opt = new LimitedMemoryBFGS(crf);
 		
 		boolean converged = false;
@@ -123,7 +129,7 @@ public class OptimizeCRF implements ByGradientValue {
 			e.printStackTrace();
 		}
 		
-		System.out.println(crf.getParameter(0) + ", " + crf.getParameter(1));
+		System.out.println(crf.getParameter(0) + ", " + crf.getParameter(1));*/
 	}
 
 }

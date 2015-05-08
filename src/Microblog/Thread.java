@@ -4,20 +4,29 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Thread {
 	
-	private Node[] nodes;
+	private long id;
+	private ArrayList<Node> nodes;
 	private NodeFeature[] nodeFeatures;
 	private String[] nodeFeatureNames;
 	private EdgeFeature[] edgeFeatures;
 	private String[] edgeFeatureNames;
 	private int nodeCount;
 	
+	public Thread(long _id, ArrayList<Node> _nodes) {
+		this.id = _id;
+		this.nodes = _nodes;
+		this.nodeCount = _nodes.size();
+			
+	}
+	
+	public ArrayList<Node> getNodes() {
+		return nodes;
+	}
 
-	public Thread(Node[] nodeList) {
-		this.nodes = nodeList;
-		this.nodeCount = nodeList.length;
+	public void setNodes(ArrayList<Node> nodes) {
+		this.nodes = nodes;
 	}
 	
 	public void setNodeNames(String[] featureNames) throws ClassNotFoundException {
@@ -57,6 +66,9 @@ public class Thread {
 	}
 	
 	public void extractFeatures() {
+		if (this.nodeFeatureNames.length > 0) {
+			this.setNodeNames(this.nodeFeatureNames);
+		}
 		
 	}
 	public void getInstance() {
@@ -64,6 +76,9 @@ public class Thread {
 		
 	}
 	public void getLabel() {
-		
+	
+	
 	}
+	
+	
 }

@@ -36,7 +36,7 @@ public class SimpleFactorExample {
               1         1        2.3
        */
       double[] arr = new double[] { 0.6, 1.3, 0.3, 2.3, };
-      mdl.addFactor (vars[0], vars[1], arr);
+      mdl.addFactor(vars[0], vars[1], arr);
       System.out.println ("Model with one edge potential:");
       mdl.dump ();
 
