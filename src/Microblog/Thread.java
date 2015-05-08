@@ -1,6 +1,7 @@
 package Microblog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Thread {
 	public long id;
@@ -17,25 +18,32 @@ public class Thread {
     this.nodeCount = this.nodes.size();
 	}
 
-	public void setNodeFeatures(String[] featureNames) throws ClassNotFoundException {
+	public void setNodeFeatures(String[] featureNames) {
 		this.nodeFeatureNames = featureNames;
-		Class featureClass = Feature.class;
-		for(int i = 0; i < featureNames.length; i++) {
-			Class c = Class.forName(featureNames[i]);
-			Object featureObj = c.getInterfaces();
-			this.nodeFeatures[i] = (NodeFeature)featureObj;
+    this.nodeFeatures = new NodeFeature[featureNames.length];
+		try {
+			for (int i = 0; i < featureNames.length; i++) {
+				NodeFeature featureObj = (NodeFeature) Class.forName(
+            "Microblog." + featureNames[i]).newInstance();
+				this.nodeFeatures[i] = featureObj;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
     // TODO: add WordFeature separately
 	}
 
-	public void setEdgeFeatures(String[] featureNames) throws ClassNotFoundException {
+	public void setEdgeFeatures(String[] featureNames) {
 		this.edgeFeatureNames = featureNames;
-		Class featureClass = Feature.class;
-		for(int i=0; i<featureNames.length; i++) {
-
-			Class c = Class.forName(featureNames[i]);
-			Object featureObj = c.getInterfaces();
-			this.edgeFeatures[i] = (EdgeFeature)featureObj;
+    this.edgeFeatures = new EdgeFeature[featureNames.length];
+		try {
+			for (int i = 0; i < featureNames.length; i++) {
+				EdgeFeature featureObj = (EdgeFeature) Class.forName(
+            "Microblog." + featureNames[i]).newInstance();
+				this.edgeFeatures[i] = featureObj;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -67,9 +75,9 @@ public class Thread {
 	public void showFeatureValues() {
 		if (this.nodeFeatures != null && this.edgeFeatures != null) {
 			for (NodeFeature nodefeature : this.nodeFeatures)
-				System.out.println(nodefeature.name + ": " + nodefeature.values.toString());
+				System.out.println(nodefeature.name + ": " + Arrays.toString(nodefeature.values));
 			for (EdgeFeature edgefeature : this.edgeFeatures)
-				System.out.println(edgefeature.name + ": " + edgefeature.values.toString());
+        System.out.println(edgefeature.name + ": " + Arrays.toString(edgefeature.values));
 		} else {
 			System.out.println("Features not defined or extracted");
 		}

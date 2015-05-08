@@ -21,12 +21,8 @@ public class DataSet {
 
   public void extractFeatures() {
     for (Thread thread : this.threads) {
-      try {
-        thread.setNodeFeatures(this.nodeFeatureNames);
-        thread.setEdgeFeatures(this.edgeFeatureNames);
-      } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-      }
+      thread.setNodeFeatures(this.nodeFeatureNames);
+      thread.setEdgeFeatures(this.edgeFeatureNames);
       thread.extractFeatures();
       thread.showFeatureValues();
     }
