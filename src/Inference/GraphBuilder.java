@@ -1,10 +1,10 @@
 package Inference;
 
+import Microblog.Thread;
 import cc.mallet.grmm.types.FactorGraph;
 import cc.mallet.grmm.types.Variable;
 import Microblog.Thread;
 import Utils.Constant;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
