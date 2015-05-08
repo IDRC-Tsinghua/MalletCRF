@@ -8,14 +8,11 @@ import java.util.ArrayList;
 public class WordFeature extends NodeFeature {
   public String name = "WordFeature";
   public int index;
-  public int polarity;
+  public int polarity; //0, 1, 2
 
-  public WordFeature(int _index, int dualDictLength) {
-    index = _index;
-    if (index * 2 < dualDictLength)
-      polarity = 0;
-    else
-      polarity = 2;
+  public WordFeature(int index, int polarity) {
+    this.index = index;
+    this.polarity = polarity;
   }
 
   public void extract(ArrayList<Node> nodes) {
@@ -47,10 +44,19 @@ public class WordFeature extends NodeFeature {
     this.potentials = new double[nodes.size()][6];
     for (int n = 0; n < nodes.size(); n++) {
       // potentials should be all 0.0 as default
-      if (this.polarity == 0)
-        this.potentials[n][3] = 1.0;
-      else
-        this.potentials[n][5] = 1.0;
+      switch (this.polarity) {
+        case 0:
+          this.potentials[n][3] = 1.0;
+          break;
+        case 1:
+          this.potentials[n][4] = 1.0;
+          break;
+        case 2:
+          this.potentials[n][5] = 1.0;
+          break;
+        default: // should never be reached
+          break;
+      }
     }
   }
 }

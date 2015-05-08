@@ -8,14 +8,18 @@ public class DataSet {
   public int featureNum;
   public String[] nodeFeatureNames;
   public String[] edgeFeatureNames;
-  public int dualDictLength;
+  public int posDictLength;
+  public int neuDictLength;
+  public int negDictLength;
 
   public DataSet(Thread[] threads) {
-    this.dualDictLength = 1000;
+    this.posDictLength = 200;
+    this.neuDictLength = 300;
+    this.negDictLength = 200;
     this.nodeFeatureNames = new String[]{"NodeEmoji"};
     this.edgeFeatureNames = new String[]{"SameAuthor", "Sibling", "Similarity", "Difference",
         "SentimentProp", "AuthorRef", "HashTag", "SameEmoji", "FollowRoot"};
-    this.featureNum = nodeFeatureNames.length + edgeFeatureNames.length + dualDictLength;
+    this.featureNum = nodeFeatureNames.length + edgeFeatureNames.length + posDictLength + neuDictLength + negDictLength;
     this.threads = threads;
   }
 
