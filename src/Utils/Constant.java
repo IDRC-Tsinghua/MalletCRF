@@ -10,7 +10,17 @@ public class Constant {
 
     public static final Map<String, String> featureFactorMap = new HashMap<String, String>();
     static {
-        featureFactorMap.put("NodeEmoji", "Emoji");
+
+        featureFactorMap.put("NodeEmoji", "NodeEmojiFactor");
+        featureFactorMap.put("SameAuthor", "SameAuthorFactor");
+        featureFactorMap.put("Sibling", "SiblingFactor");
+        featureFactorMap.put("Similarity", "SimilarityFactor");
+        featureFactorMap.put("Difference", "DifferenceFactor");
+        featureFactorMap.put("SentimentProp", "SentimentPropFactor");
+        featureFactorMap.put("AuthorRef", "AuthorRefFactor");
+        featureFactorMap.put("Hashtag", "HashtagFactor");
+        featureFactorMap.put("SameEmoji", "SameEmojiFactor");
+        featureFactorMap.put("FollowRoot", "FollowRootFactor");
         // TODO: Add more featureName~featureFactor Map
     }
 }

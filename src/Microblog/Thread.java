@@ -6,14 +6,40 @@ import java.util.List;
 
 public class Thread {
 	
-	private long id;
-	private ArrayList<Node> nodes;
-	private NodeFeature[] nodeFeatures;
-	private String[] nodeFeatureNames;
-	private EdgeFeature[] edgeFeatures;
-	private String[] edgeFeatureNames;
-	private int nodeCount;
-	
+	public long id;
+	public ArrayList<Node> nodes;
+	public NodeFeature[] nodeFeatures;
+	public String[] nodeFeatureNames;
+	public EdgeFeature[] edgeFeatures;
+	public String[] edgeFeatureNames;
+	public int nodeCount;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String[] getNodeFeatureNames() {
+		return nodeFeatureNames;
+	}
+
+	public void setNodeFeatureNames(String[] nodeFeatureNames) {
+		this.nodeFeatureNames = nodeFeatureNames;
+	}
+
+
+	public String[] getEdgeFeatureNames() {
+		return edgeFeatureNames;
+	}
+
+	public void setEdgeFeatureNames(String[] edgeFeatureNames) {
+		this.edgeFeatureNames = edgeFeatureNames;
+	}
+
+
 	public Thread(long _id, ArrayList<Node> _nodes) {
 		this.id = _id;
 		this.nodes = _nodes;
