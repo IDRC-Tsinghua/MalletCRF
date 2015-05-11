@@ -1,6 +1,5 @@
 package Microblog;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -19,7 +18,7 @@ public class DataReader {
     Thread[] dataset = new Thread[thread_num];
     int pfile = 0;
     for (File file : datafiles) {
-      System.out.println(file);
+      //System.out.println(file);
       ArrayList<Node> nodes = new ArrayList<>();
       long threadID = 0;
       try {
@@ -35,8 +34,8 @@ public class DataReader {
       } catch (Exception e) {
         e.printStackTrace();
       }
-      for (Node node : nodes)
-        System.out.println(node.toString());
+      /*for (Node node : nodes)
+        System.out.println(node.toString());*/
       dataset[pfile] = new Thread(threadID, nodes);
       pfile++;
     }

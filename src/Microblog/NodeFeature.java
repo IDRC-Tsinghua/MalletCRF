@@ -2,14 +2,16 @@ package Microblog;
 
 import java.util.ArrayList;
 
-abstract class NodeFeature extends Feature {
+abstract public class NodeFeature extends Feature {
 	String name = "NodeFeature";
-
-  abstract public void extract(ArrayList<Node> nodes);
 }
 
 class NodeEmoji extends NodeFeature {
-  String name = "NodeEmoji";
+
+  public NodeEmoji() {
+    this.name = "NodeEmoji";
+    this.choiceNum = 3; // different from other features
+  }
 
   public void extract(ArrayList<Node> nodes) {
     // compute x and values
@@ -32,9 +34,9 @@ class NodeEmoji extends NodeFeature {
         this.values[n] = 1.0;
       else
         this.values[n] = 0.0;
-      }
+    }
     // compute potentials
-    this.potentials = new double[nodes.size()][9];
+    this.potentials = new double[nodes.size()][this.choiceNum*3];
     for (int n = 0; n < nodes.size(); n++) {
       this.potentials[n][0] = 1.0;
       this.potentials[n][4] = 1.0;

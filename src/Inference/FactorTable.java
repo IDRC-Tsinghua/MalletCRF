@@ -9,19 +9,28 @@ import cc.mallet.grmm.types.Variable;
 
 public class FactorTable {
 
+    public void BasicFactor(FactorGraph mdl, double[] prob) {
+
+        VarSet varSet = new HashVarSet(new Variable[]{
+                new Variable(3), // node label
+                new Variable(3)     // parent label
+        });
+        Factor factor = new TableFactor(varSet, prob);
+        mdl.addFactor(factor);
+    }
 
     public void NodeEmojiFactor(FactorGraph mdl) {
 
-
+        double[] prob = new double[9];
+        BasicFactor(mdl, prob);
     }
 
     public void SameAuthorFactor(FactorGraph mdl) {
 
-
     }
 
     public void SiblingFactor(FactorGraph mdl) {
-        
+
     }
 
     public void SimilarityFactor(FactorGraph mdl) {
@@ -52,6 +61,9 @@ public class FactorTable {
     public void FollowRootFactor(FactorGraph mdl) {
 
     }
+
+    // ====================================================
+
 
     public void WordPolarityFactor(FactorGraph mdl) {
 

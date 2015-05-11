@@ -3,6 +3,8 @@ package Microblog;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class Node {
 
   public String name;
@@ -15,6 +17,7 @@ public class Node {
   public String[] hashtag;
   public String[] emoji;
   public int[] word;
+  public HashMap<Integer, Integer> vector;
 
   public Node(JSONObject obj) {
     try {
@@ -38,11 +41,14 @@ public class Node {
       /*JSONArray childrenArray = obj.getJSONArray("children");
       children = new int[childrenArray.length()];
       for (int i = 0; i < childrenArray.length(); i++)
-        children[i] = childrenArray.getInt(i);
+        children[i] = childrenArray.getInt(i);*/
       JSONArray wordArray = obj.getJSONArray("vector");
       word = new int[wordArray.length()];
-      for (int i = 0; i < wordArray.length(); i++)
-        word[i] = wordArray.getInt(i);*/
+      vector = new HashMap<>();
+      for (int i = 0; i < wordArray.length(); i++) {
+        word[i] = wordArray.getJSONArray(i).getInt(0);
+        vector.put(wordArray.getJSONArray(i).getInt(0), wordArray.getJSONArray(i).getInt(1));
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
