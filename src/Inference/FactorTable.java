@@ -54,6 +54,8 @@ public class FactorTable {
 
     public double[][] nodeFeatureCount = new double[Constant.nodeFeatureNames.length][3*3];
     public double[][] edgeFeatureCount = new double[Constant.edgeFeatureNames.length][3*3];
+    public double[] nodeFeatureCountAll = new double[Constant.nodeFeatureNames.length];
+    public double[] edgeFeatureCountAll = new double[Constant.nodeFeatureNames.length];
 
     public void Stats(Microblog.Thread[] threads, double[] params,
                       int nodeFeatureNum, int edgeFeatureNum) {
@@ -78,6 +80,7 @@ public class FactorTable {
                     int x = thread.nodeFeatures[i].x[j];
                     int label = thread.nodes.get(j).label;
                     this.nodeFeatureCount[i][x*3 + label] += 1;
+                    this.nodeFeatureCountAll[i] += 1;
                 }
             }
 
@@ -90,9 +93,22 @@ public class FactorTable {
                     int curLabel = curNode.label;
                     int parentLabel = parentNode.label;
                     this.edgeFeatureCount[i][x*curLabel + parentLabel] += 1;
+                    this.edgeFeatureCountAll[i] += 1;
                 }
-
             }
+
+            // normalize
+            for(int i=0; i<nodeFeatureNum; i++) {
+                for (int j=0; j<this.nodeFeatureCount[i].length; j++) {
+                    this.nodeFeatureCount[i][j] /= this.nodeFeatureCountAll[i];
+                }
+            }
+            for(int i=0; i<edgeFeatureNum; i++) {
+                for(int j=0; j<this.edgeFeatureCount[i].length; j++) {
+                    this.edgeFeatureCount[i][j] /= this.edgeFeatureCountAll[i];
+                }
+            }
+            
 
         }
 
