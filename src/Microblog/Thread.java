@@ -11,35 +11,35 @@ public class Thread {
 	public EdgeFeature[] edgeFeatures = null;
 	String[] edgeFeatureNames = null;
 	private int nodeCount;
-	
+
 	public Thread(long id, ArrayList<Node> nodes) {
 		this.id = id;
 		this.nodes = nodes;
-    this.nodeCount = this.nodes.size();
+		this.nodeCount = this.nodes.size();
 	}
 
 	public void setNodeFeatures(String[] featureNames) {
 		this.nodeFeatureNames = featureNames;
-    this.nodeFeatures = new NodeFeature[featureNames.length];
+		this.nodeFeatures = new NodeFeature[featureNames.length];
 		try {
 			for (int i = 0; i < featureNames.length; i++) {
 				NodeFeature featureObj = (NodeFeature) Class.forName(
-            "Microblog." + featureNames[i]).newInstance();
+						"Microblog." + featureNames[i]).newInstance();
 				this.nodeFeatures[i] = featureObj;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    // TODO: add WordFeature separately
+		// TODO: add WordFeature separately
 	}
 
 	public void setEdgeFeatures(String[] featureNames) {
 		this.edgeFeatureNames = featureNames;
-    this.edgeFeatures = new EdgeFeature[featureNames.length];
+		this.edgeFeatures = new EdgeFeature[featureNames.length];
 		try {
 			for (int i = 0; i < featureNames.length; i++) {
 				EdgeFeature featureObj = (EdgeFeature) Class.forName(
-            "Microblog." + featureNames[i]).newInstance();
+						"Microblog." + featureNames[i]).newInstance();
 				this.edgeFeatures[i] = featureObj;
 			}
 		} catch (Exception e) {
@@ -77,7 +77,7 @@ public class Thread {
 			for (NodeFeature nodefeature : this.nodeFeatures)
 				System.out.println(nodefeature.name + ": " + Arrays.toString(nodefeature.x));
 			for (EdgeFeature edgefeature : this.edgeFeatures)
-        System.out.println(edgefeature.name + ": " + Arrays.toString(edgefeature.x));
+				System.out.println(edgefeature.name + ": " + Arrays.toString(edgefeature.x));
 		} else {
 			System.out.println("Features not defined or extracted");
 		}
