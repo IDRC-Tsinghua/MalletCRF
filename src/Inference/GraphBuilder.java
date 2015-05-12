@@ -4,10 +4,11 @@ import Microblog.Thread;
 import cc.mallet.grmm.types.FactorGraph;
 import cc.mallet.grmm.types.Variable;
 import Microblog.Thread;
+import Inference.FactorTable;
 import Utils.Constant;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 
 public class GraphBuilder {
 	public FactorGraph build(Thread[] threads, double[] params, 
@@ -22,6 +23,16 @@ public class GraphBuilder {
 		
 		return graph;
 	}
+
+	public FactorTable trainFactor(Thread[] threads, double[] params,
+                                   int nodeFeatureNum, int EdgeFeatureNum) {
+
+        FactorTable factorTable = new FactorTable();
+
+        for (Thread thread: threads) {
+
+        }
+    }
 	
 	public FactorGraph buildOneGraph(Thread thread, double[] params, 
 			int nodeFeatureNum, int EdgeFeatureNum) throws NoSuchMethodException,

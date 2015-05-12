@@ -8,6 +8,10 @@ import java.util.Map;
  */
 public class Constant {
 
+    public static String[] nodeFeatureNames = new String[]{"NodeEmoji"};
+    public static String[] edgeFeatureNames = new String[]{"SameAuthor", "Similarity", "Difference",
+            "SentimentProp", "AuthorRef", "HashTag", "SameEmoji", "FollowRoot"};
+
     public static final Map<String, String> featureFactorMap = new HashMap<String, String>();
     static {
 
