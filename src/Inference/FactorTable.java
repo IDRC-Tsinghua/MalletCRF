@@ -49,15 +49,15 @@ public class FactorTable {
     */
 
 
-    public Factor[] nodeFeatureFactor;
-    public Factor[] edgeFeatureFactor;
+    public Factor[] nodeFeatureFactor = new Factor[Constant.nodeFeatureNames.length];
+    public Factor[] edgeFeatureFactor = new Factor[Constant.edgeFeatureNames.length];
 
     public double[][] nodeFeatureCount = new double[Constant.nodeFeatureNames.length][3*3];
     public double[][] edgeFeatureCount = new double[Constant.edgeFeatureNames.length][3*3];
     public double[] nodeFeatureCountAll = new double[Constant.nodeFeatureNames.length];
     public double[] edgeFeatureCountAll = new double[Constant.nodeFeatureNames.length];
 
-    public void Stats(Microblog.Thread[] threads, double[] params,
+    public void Stats(Microblog.Thread[] threads,
                       int nodeFeatureNum, int edgeFeatureNum) {
         for (Thread thread: threads) {
 
@@ -102,19 +102,29 @@ public class FactorTable {
                 for (int j=0; j<this.nodeFeatureCount[i].length; j++) {
                     this.nodeFeatureCount[i][j] /= this.nodeFeatureCountAll[i];
                 }
+                VarSet varSet = new HashVarSet(new Variable[]{
+                        new Variable(3), // node label
+                        new Variable(3)  // parent label
+                });
+                this.nodeFeatureFactor[i] = new TableFactor(varSet, this.nodeFeatureCount[i]);
             }
             for(int i=0; i<edgeFeatureNum; i++) {
-                for(int j=0; j<this.edgeFeatureCount[i].length; j++) {
+                for (int j = 0; j < this.edgeFeatureCount[i].length; j++) {
                     this.edgeFeatureCount[i][j] /= this.edgeFeatureCountAll[i];
                 }
+                VarSet varSet = new HashVarSet(new Variable[]{
+                        new Variable(2), // choice num
+                        new Variable(3), // cur label
+                        new Variable(3)  // parent label
+                });
+                this.edgeFeatureFactor[i] = new TableFactor(varSet, this.edgeFeatureCount[i]);
             }
-            
-
         }
 
     }
 
 
+    /*
     public void BasicFactor(FactorGraph mdl, double[] prob) {
 
         VarSet varSet = new HashVarSet(new Variable[]{
@@ -124,50 +134,7 @@ public class FactorTable {
         Factor factor = new TableFactor(varSet, prob);
         mdl.addFactor(factor);
     }
-
-    public void NodeEmojiFactor(FactorGraph mdl) {
-
-        double[] prob = new double[9];
-        BasicFactor(mdl, prob);
-    }
-
-    public void SameAuthorFactor(FactorGraph mdl) {
-
-    }
-
-    public void SiblingFactor(FactorGraph mdl) {
-
-    }
-
-    public void SimilarityFactor(FactorGraph mdl) {
-
-
-    }
-
-    public void DifferenceFactor(FactorGraph mdl) {
-
-    }
-
-    public void SentimentPropFactor(FactorGraph mdl) {
-
-    }
-
-    public void AuthorRefFactor(FactorGraph mdl) {
-
-    }
-
-    public void HashtagFactor(FactorGraph mdl) {
-
-    }
-
-    public void SameEmojiFactor(FactorGraph mdl) {
-
-    }
-
-    public void FollowRootFactor(FactorGraph mdl) {
-
-    }
-
+    */
     // ====================================================
 
 
