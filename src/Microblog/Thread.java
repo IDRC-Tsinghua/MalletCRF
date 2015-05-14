@@ -8,8 +8,10 @@ public class Thread {
 	public ArrayList<Node> nodes = null;
 	public NodeFeature[] nodeFeatures = null;
 	String[] nodeFeatureNames = null;
+	public int nodeFeatureNum;
 	public EdgeFeature[] edgeFeatures = null;
 	String[] edgeFeatureNames = null;
+	public int edgeFeatureNum;
 	private int nodeCount;
 
 	public Thread(long id, ArrayList<Node> nodes) {
@@ -31,6 +33,7 @@ public class Thread {
 			e.printStackTrace();
 		}
 		// TODO: add WordFeature separately
+		this.nodeFeatureNum = this.nodeFeatures.length;
 	}
 
 	public void setEdgeFeatures(String[] featureNames) {
@@ -45,6 +48,7 @@ public class Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		this.edgeFeatureNum = this.edgeFeatures.length;
 	}
 
 	public void extractNodeFeatures() {
