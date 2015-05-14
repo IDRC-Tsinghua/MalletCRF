@@ -6,14 +6,20 @@ import cc.mallet.grmm.inference.Inferencer;
 import cc.mallet.grmm.inference.JunctionTreeInferencer;
 import cc.mallet.grmm.types.Factor;
 import cc.mallet.grmm.types.FactorGraph;
+import cc.mallet.grmm.types.VarSet;
 
 import java.lang.ThreadGroup;
 
 public class GraphBuilder {
 
     public FactorGraph build(VarSet[] xNode, VarSet[] xEdge, VarSet y,
-                             Thread thread) {
+                             Thread thread, double[][] probs) {
 
+        FactorGraph mdl = new FactorGraph();
+        for (Node node : thread.nodes) {
+
+
+        }
     }
 
 	public FactorGraph build(FactorTable factorTable, Thread thread) {

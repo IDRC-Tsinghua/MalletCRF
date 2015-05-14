@@ -20,6 +20,30 @@ public class FactorTable {
     public double[] nodeFeatureCountAll = new double[Constant.nodeFeatureNames.length];
     public double[] edgeFeatureCountAll = new double[Constant.nodeFeatureNames.length];
 
+    public VarSet[] nodeFeatureVarSet = new VarSet[Constant.nodeFeatureNames.length];
+    public VarSet[] edgeFeatureVarSet = new VarSet[Constant.edgeFeatureNames.length];
+
+
+    public FactorTable(){
+
+        for(int i=0; i< Constant.nodeFeatureNames.length; i++) {
+
+            nodeFeatureVarSet[i] = new HashVarSet(new Variable[]{
+                    new Variable(3), // node label
+                    new Variable(3)  // parent label
+            });
+        }
+
+        for(int i=0; i< Constant.edgeFeatureNames.length; i++) {
+            edgeFeatureVarSet[i] = new HashVarSet(new Variable[]{
+
+                    new Variable(2), // choice num
+                    new Variable(3), // cur label
+                    new Variable(3)  // parent label
+            });
+        }
+    }
+
     public void Stats(Microblog.Thread[] threads,
                       int nodeFeatureNum, int edgeFeatureNum) {
         for (Thread thread: threads) {
@@ -65,25 +89,18 @@ public class FactorTable {
 
             // normalize
             for(int i=0; i<nodeFeatureNum; i++) {
-                for (int j=0; j<this.nodeFeatureCount[i].length; j++) {
+                for (int j=0; j<this.nodeFeatureProb[i].length; j++) {
                     this.nodeFeatureProb[i][j] /= this.nodeFeatureCountAll[i];
                 }
-                VarSet varSet = new HashVarSet(new Variable[]{
-                        new Variable(3), // node label
-                        new Variable(3)  // parent label
-                });
-                this.nodeFeatureFactor[i] = new TableFactor(varSet, this.nodeFeatureCount[i]);
+
+                this.nodeFeatureFactor[i] = new TableFactor(nodeFeatureVarSet[i], this.nodeFeatureProb[i]);
             }
             for(int i=0; i<edgeFeatureNum; i++) {
-                for (int j = 0; j < this.edgeFeatureCount[i].length; j++) {
+                for (int j = 0; j < this.edgeFeatureProb[i].length; j++) {
                     this.edgeFeatureProb[i][j] /= this.edgeFeatureCountAll[i];
                 }
-                VarSet varSet = new HashVarSet(new Variable[]{
-                        new Variable(2), // choice num
-                        new Variable(3), // cur label
-                        new Variable(3)  // parent label
-                });
-                this.edgeFeatureFactor[i] = new TableFactor(varSet, this.edgeFeatureCount[i]);
+
+                this.edgeFeatureFactor[i] = new TableFactor(edgeFeatureVarSet[i], this.edgeFeatureProb[i]);
             }
         }
 
