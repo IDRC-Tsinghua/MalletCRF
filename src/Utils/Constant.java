@@ -11,6 +11,10 @@ public class Constant {
     public static String[] nodeFeatureNames = new String[]{"NodeEmoji"};
     public static String[] edgeFeatureNames = new String[]{"SameAuthor", "Similarity", "Difference",
             "SentimentProp", "AuthorRef", "HashTag", "SameEmoji", "FollowRoot"};
+    public static int posDictLength = 345;
+    public static int neuDictLength = 335;
+    public static int negDictLength = 328;
+    public static int sentimentDictLength = 1008;
 
     public static final Map<String, String> featureFactorMap = new HashMap<String, String>();
     static {
