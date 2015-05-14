@@ -58,7 +58,6 @@ public class OptimizeCRF implements ByGradientValue {
 		double logLH = 0.0;
 		int pt = 0;
 		for (Thread thread : threads) {
-			int pf = 0;
 			double threadSum = 0.0;
 			for (Feature nodeFeature : thread.nodeFeatures) {
 				double featureSum = 0.0;

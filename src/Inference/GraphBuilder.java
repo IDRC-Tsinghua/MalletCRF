@@ -7,7 +7,14 @@ import cc.mallet.grmm.inference.JunctionTreeInferencer;
 import cc.mallet.grmm.types.Factor;
 import cc.mallet.grmm.types.FactorGraph;
 
+import java.lang.ThreadGroup;
+
 public class GraphBuilder {
+
+    public FactorGraph build(VarSet[] xNode, VarSet[] xEdge, VarSet y,
+                             Thread thread) {
+
+    }
 
 	public FactorGraph build(FactorTable factorTable, Thread thread) {
 
