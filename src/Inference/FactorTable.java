@@ -73,12 +73,9 @@ public class FactorTable {
 
             // foreach node on each edgefeature
             for(int i=0; i<edgeFeatureNum; i++) {
-                for(int j=0; j<thread.nodes.size(); j++) {
+                for(int j=1; j<thread.nodes.size(); j++) {
                     int x = thread.edgeFeatures[i].x[j];
                     Node curNode = thread.nodes.get(j);
-                    if (curNode.parent == -1) {
-                        break;
-                    }
                     Node parentNode = thread.nodes.get(curNode.parent);
                     int curLabel = curNode.label;
                     int parentLabel = parentNode.label;
