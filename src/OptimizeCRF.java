@@ -1,7 +1,10 @@
-import Microblog.DataReader;
-import Microblog.DataSet;
-import Microblog.Feature;
+import Inference.FactorTable;
+import Inference.GraphBuilder;
+import Microblog.*;
 import Microblog.Thread;
+import cc.mallet.grmm.inference.Inferencer;
+import cc.mallet.grmm.inference.TRP;
+import cc.mallet.grmm.types.*;
 import cc.mallet.optimize.Optimizable.ByGradientValue;
 
 
@@ -10,6 +13,7 @@ public class OptimizeCRF implements ByGradientValue {
 	double[] params;
 	Thread[] threads;
 	double[] logZ;
+	GraphBuilder graphBuilder = new GraphBuilder();
 	
 	public OptimizeCRF(double[] init_params, Thread[] dataset) {
 		params = new double[init_params.length];
@@ -17,8 +21,6 @@ public class OptimizeCRF implements ByGradientValue {
 			params[i] = init_params[i];
 		threads = dataset;
 		logZ = new double[dataset.length];
-		for (int i = 0; i < dataset.length; i++)
-			logZ[i] = getLogPartitionValue(dataset[i]);
 	}
 	
 	@Override
@@ -57,6 +59,8 @@ public class OptimizeCRF implements ByGradientValue {
 	public double getValue() {
 		double logLH = 0.0;
 		int pt = 0;
+    for (int i = 0; i < threads.length; i++)
+      logZ[i] = getLogPartitionValue(threads[i]);
 		for (Thread thread : threads) {
 			double threadSum = 0.0;
 			for (Feature nodeFeature : thread.nodeFeatures) {
@@ -82,7 +86,44 @@ public class OptimizeCRF implements ByGradientValue {
 
 	double[] getModelExpec(Thread thread, double[] params){
 		double[] modelExpec = new double[params.length];
-		// TODO: implement model expectation computation with factor graph and TRP.
+    int nodeFeatureNum = thread.nodeFeatureNum;
+    int edgeFeatureNum = thread.nodeFeatureNum;
+    int nodeCount = thread.nodes.size();
+    VarSet[] xNode = new VarSet[nodeFeatureNum];
+    VarSet[] xEdge = new VarSet[edgeFeatureNum];
+    VarSet y = new HashVarSet();
+    // TODO: change the definition of build function
+		FactorGraph graph = graphBuilder.build(new FactorTable(), thread);
+		Inferencer inf = new TRP();
+		inf.computeMarginals(graph);
+    for (int i = 0; i < nodeFeatureNum; i++) {
+      NodeFeature feature = thread.nodeFeatures[i];
+      for (int n = 0; n < nodeCount; n++) {
+        Factor single = inf.lookupMarginal(y.get(n));
+        int x = feature.x[n];
+        for (int a = 0; a < 3; a++) {
+          if (feature.potentials[n][x*3+a] > 0)
+            modelExpec[i] += single.value(new Assignment(y.get(n), a)) * feature.potentials[n][x*3+a];
+        }
+      }
+    }
+    int edgeCount = nodeCount - 1;
+    for (int i = 0; i < edgeFeatureNum; i++) {
+      EdgeFeature feature = thread.edgeFeatures[i];
+      for (int e = 0; e < edgeCount; e++) {
+        Variable[] varList = new Variable[3];
+        varList[0] = xEdge[i].get(e);
+        varList[1] = y.get(thread.nodes.get(e+1).parent);
+        varList[2] = y.get(e + 1);
+        Factor tripple = inf.lookupMarginal(new HashVarSet(varList));
+        int x = feature.x[e];
+        for (int a = 0; a < 9; a++) {
+          if (feature.potentials[e][x*9+a] > 0)
+            modelExpec[i+nodeFeatureNum] +=
+                tripple.value(new Assignment(varList, new int[]{x, a/3, a%3})) * feature.potentials[e][x*9+a];
+        }
+      }
+    }
 		return modelExpec;
 	}
 

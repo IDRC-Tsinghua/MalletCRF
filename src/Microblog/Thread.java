@@ -1,5 +1,7 @@
 package Microblog;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -8,8 +10,10 @@ public class Thread {
 	public ArrayList<Node> nodes = null;
 	public NodeFeature[] nodeFeatures = null;
 	String[] nodeFeatureNames = null;
+	public int nodeFeatureNum;
 	public EdgeFeature[] edgeFeatures = null;
 	String[] edgeFeatureNames = null;
+	public int edgeFeatureNum;
 	private int nodeCount;
 
 	public Thread(long id, ArrayList<Node> nodes) {
@@ -18,9 +22,9 @@ public class Thread {
 		this.nodeCount = this.nodes.size();
 	}
 
-	public void setNodeFeatures(String[] featureNames) {
+	public void setNodeFeatures(String[] featureNames, int nodeFeatureNum) {
 		this.nodeFeatureNames = featureNames;
-		this.nodeFeatures = new NodeFeature[featureNames.length];
+		this.nodeFeatures = new NodeFeature[nodeFeatureNum];
 		try {
 			for (int i = 0; i < featureNames.length; i++) {
 				NodeFeature featureObj = (NodeFeature) Class.forName(
@@ -30,7 +34,34 @@ public class Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// TODO: add WordFeature separately
+		int pf = featureNames.length;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("data/positive.txt"));
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] pair = line.split("\t");
+				this.nodeFeatures[pf] = new WordFeature(Integer.parseInt(pair[0]), 2);
+				pf++;
+			}
+			br.close();
+			br = new BufferedReader(new FileReader("data/neutral.txt"));
+			while ((line = br.readLine()) != null) {
+				String[] pair = line.split("\t");
+				this.nodeFeatures[pf] = new WordFeature(Integer.parseInt(pair[0]), 1);
+				pf++;
+			}
+			br.close();
+			br = new BufferedReader(new FileReader("data/negative.txt"));
+			while ((line = br.readLine()) != null) {
+				String[] pair = line.split("\t");
+				this.nodeFeatures[pf] = new WordFeature(Integer.parseInt(pair[0]), 0);
+				pf++;
+			}
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.nodeFeatureNum = this.nodeFeatures.length;
 	}
 
 	public void setEdgeFeatures(String[] featureNames) {
@@ -45,6 +76,7 @@ public class Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		this.edgeFeatureNum = this.edgeFeatures.length;
 	}
 
 	public void extractNodeFeatures() {

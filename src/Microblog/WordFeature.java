@@ -6,13 +6,13 @@ import java.util.ArrayList;
  * Created by wyc on 2015/5/7.
  */
 public class WordFeature extends NodeFeature {
-  public String name = "WordFeature";
   public int index;
   public int polarity; //0, 1, 2
 
   public WordFeature(int index, int polarity) {
     this.index = index;
     this.polarity = polarity;
+    this.name = "Word-" + polarity + "-" + index;
   }
 
   public void extract(ArrayList<Node> nodes) {

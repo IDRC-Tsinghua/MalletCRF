@@ -1,14 +1,9 @@
 package Inference;
 
-import Microblog.*;
+import Microblog.Node;
 import Microblog.Thread;
-import cc.mallet.grmm.types.Factor;
-import cc.mallet.grmm.types.FactorGraph;
-import cc.mallet.grmm.types.HashVarSet;
-import cc.mallet.grmm.types.TableFactor;
-import cc.mallet.grmm.types.VarSet;
-import cc.mallet.grmm.types.Variable;
 import Utils.Constant;
+import cc.mallet.grmm.types.*;
 
 public class FactorTable {
 
@@ -49,7 +44,7 @@ public class FactorTable {
         for (Thread thread: threads) {
 
             // init the category of feature
-            thread.setNodeFeatures(Constant.nodeFeatureNames);
+            thread.setNodeFeatures(Constant.nodeFeatureNames, Constant.sentimentDictLength);
             thread.setEdgeFeatures(Constant.edgeFeatureNames);
 
             // extract all the featrue

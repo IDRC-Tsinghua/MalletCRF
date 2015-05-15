@@ -6,12 +6,11 @@
    information, see the file `LICENSE' included with this distribution. */
 
 
-import java.util.Random;
-
 import cc.mallet.grmm.inference.Inferencer;
-import cc.mallet.grmm.inference.JunctionTreeInferencer;
 import cc.mallet.grmm.inference.TRP;
 import cc.mallet.grmm.types.*;
+
+import java.util.Random;
 
 /**
  * Created: Aug 13, 2004
@@ -62,11 +61,16 @@ public class SimpleGraphExample {
     for (int varnum = 0; varnum < allVars.length; varnum++) {
       Variable var = allVars[varnum];
       Factor ptl = inf.lookupMarginal (var);
+      System.out.println(ptl.value(new Assignment(var, 0)));
       for (AssignmentIterator it = ptl.assignmentIterator (); it.hasNext (); it.next()) {
         int outcome = it.indexOfCurrentAssn ();
         System.out.println (var+"  "+outcome+"   "+ptl.value (it));
       }
       System.out.println ();
+    }
+    Factor pair = inf.lookupMarginal(new HashVarSet(new Variable[] {allVars[2], allVars[3]}));
+    for (AssignmentIterator it = pair.assignmentIterator(); it.hasNext(); it.next()) {
+      System.out.println(it.indexOfCurrentAssn() + " " + pair.value(it));
     }
 
   }
