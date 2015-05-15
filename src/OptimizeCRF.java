@@ -5,7 +5,9 @@ import Microblog.Thread;
 import cc.mallet.grmm.inference.Inferencer;
 import cc.mallet.grmm.inference.TRP;
 import cc.mallet.grmm.types.*;
+import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizable.ByGradientValue;
+import cc.mallet.optimize.Optimizer;
 
 
 public class OptimizeCRF implements ByGradientValue {
@@ -15,12 +17,12 @@ public class OptimizeCRF implements ByGradientValue {
   double[] logZ;
   GraphBuilder graphBuilder = new GraphBuilder();
 
-  public OptimizeCRF(double[] init_params, Thread[] dataset) {
+  public OptimizeCRF(double[] init_params, DataSet dataset) {
     params = new double[init_params.length];
     for (int i = 0; i < init_params.length; i++)
       params[i] = init_params[i];
-    threads = dataset;
-    logZ = new double[dataset.length];
+    threads = dataset.threads;
+    logZ = new double[threads.length];
   }
 
   @Override
@@ -175,25 +177,30 @@ public class OptimizeCRF implements ByGradientValue {
   }
 
   public static void main(String[] args) {
+    System.out.println("==========Reading Data==========");
     DataReader dataReader = new DataReader();
     Thread[] threads = dataReader.readData("data/Interstellar");
     DataSet dataset = new DataSet(threads);
     System.out.println(dataset.getThreadNum());
-    dataset.extractFeatures();
-    double[] init_params = new double[dataset.featureNum];
 
-		/*OptimizeCRF crf = new OptimizeCRF(init_params, dataset);
+    System.out.println("==========Extracting Features==========");
+    dataset.extractFeatures();
+
+    System.out.println("==========Start Learning==========");
+    double[] init_params = new double[dataset.featureNum];
+		OptimizeCRF crf = new OptimizeCRF(init_params, dataset);
     Optimizer opt = new LimitedMemoryBFGS(crf);
-		
 		boolean converged = false;
-		
 		try {
 			converged = opt.optimize();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println(crf.getParameter(0) + ", " + crf.getParameter(1));*/
+
+    System.out.println("==========Learning Finished==========");
+		System.out.println("converged: " + converged);
+    for (int p = 0; p < crf.getNumParameters(); p++)
+		  System.out.println(crf.getParameter(p));
   }
 
 }
