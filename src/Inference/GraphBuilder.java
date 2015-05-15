@@ -1,5 +1,6 @@
 package Inference;
 
+import Microblog.EdgeFeature;
 import Microblog.Node;
 import Microblog.NodeFeature;
 import Microblog.Thread;
@@ -17,14 +18,16 @@ public class GraphBuilder {
 
      */
     public FactorGraph buildWithCRF(VarSet[] xNode, VarSet[] xEdge, VarSet y,
-                                    Thread thread, double[][] probs) {
+                                    Thread thread, double[] params) {
 
 
         FactorGraph mdl = new FactorGraph();
 
         // for each node feature
+        // double[] potentialValue = new double[params.length];
         for(int i=0; i<thread.nodeFeatures.length; i++) {
             // for each node
+            NodeFeature nodeFeature = thread.nodeFeatures[i];
             int nodeVariableCur = 0;
             for(int j=0; j<thread.nodes.size(); j++) {
 
@@ -32,8 +35,15 @@ public class GraphBuilder {
                         xNode[i].get(nodeVariableCur),
                         y.get(nodeVariableCur)
                 });
-                Factor factor = new TableFactor(varSet,
-                        thread.nodeFeatures[i].potentials[j]);
+
+                // potentialValue
+                int potentialLength = nodeFeature.potentials[j].length;
+                double[] potentialValue = new double[potentialLength];
+                for (int t = 0; t < potentialLength; t++) {
+                    // param times potential
+                    potentialValue[t] = params[i] * potentialValue[t];
+                }
+                Factor factor = new TableFactor(varSet, potentialValue);
                 mdl.addFactor(factor);
                 nodeVariableCur += 1;
             }
@@ -44,6 +54,7 @@ public class GraphBuilder {
             // for each node, from the second node
 
             int edgeVariableCur = 0;
+            EdgeFeature edgeFeature = thread.edgeFeatures[i];
             for(int j=1; j<thread.nodes.size(); j++) {
                 VarSet varSet = new HashVarSet(new Variable[]{
 
@@ -51,33 +62,47 @@ public class GraphBuilder {
                         y.get(edgeVariableCur),
                         y.get(edgeVariableCur-1)
                 });
-                Factor factor = new TableFactor(varSet,
-                        thread.edgeFeatures[i].potentials[j]);
+                int potentialLength = edgeFeature.potentials[j].length;
+                double[] potentialValue = new double[potentialLength];
+                for (int t = 0; t < potentialLength; t++) {
+                    // param times potential
+                    potentialValue[t] = params[i] * potentialValue[t];
+                }
+                Factor factor = new TableFactor(varSet, potentialValue);
                 mdl.addFactor(factor);
                 edgeVariableCur += 1;
             }
         }
     }
 
-	public FactorGraph buildWithBN(FactorTable factorTable, Thread thread) {
 
-		FactorGraph mdl = new FactorGraph();
-		for (Node node: thread.nodes) {
-
-            for (Factor nodeFactor : factorTable.nodeFeatureFactor) {
-                mdl.addFactor(nodeFactor);
-            }
-            for (Factor edgeFactor : factorTable.edgeFeatureFactor) {
-                mdl.addFactor(edgeFactor);
-            }
-		}
-        return mdl;
-	}
-
-    public void inference(FactorGraph mdl) {
+    /*
+    public void inference(FactorGraph mdl, Thread thread) {
 
         Inferencer inf = new JunctionTreeInferencer();
         inf.computeMarginals(mdl);
+        int nodeFeatureNum = thread.nodeFeatureNum;
+        int edgeFeatureNum = thread.edgeFeatureNum;
+        int nodeSize = thread.nodes.size();
+        for(int n = 0; n < nodeFeatureNum; n++) {
+
+            NodeFeature nodeFeature = thread.nodeFeatures[n];
+            for(int j = 0; j < nodeSize; j++) {
+                // Factor single = inf.lookupMarginal()
+            }
+
+        }
+
+        for(int e = 1; e < edgeFeatureNum; e++) {
+
+
+        }
+
+    }
+    */
+
+    public static void main(String[] args) {
+
 
     }
 }

@@ -7,19 +7,27 @@ import cc.mallet.grmm.types.*;
 
 public class FactorTable {
 
-    public Factor[] nodeFeatureFactor = new Factor[Constant.nodeFeatureNames.length];
-    public Factor[] edgeFeatureFactor = new Factor[Constant.edgeFeatureNames.length];
+    public Factor[] nodeFeatureFactor;
+    public Factor[] edgeFeatureFactor;
 
-    public double[][] nodeFeatureProb = new double[Constant.nodeFeatureNames.length][3*3];
-    public double[][] edgeFeatureProb = new double[Constant.edgeFeatureNames.length][3*3];
-    public double[] nodeFeatureCountAll = new double[Constant.nodeFeatureNames.length];
-    public double[] edgeFeatureCountAll = new double[Constant.nodeFeatureNames.length];
+    public double[][] nodeFeatureProb;
+    public double[][] edgeFeatureProb;
+    public double[] nodeFeatureCountAll;
+    public double[] edgeFeatureCountAll;
 
-    public VarSet[] nodeFeatureVarSet = new VarSet[Constant.nodeFeatureNames.length];
-    public VarSet[] edgeFeatureVarSet = new VarSet[Constant.edgeFeatureNames.length];
+    public VarSet[] nodeFeatureVarSet;
+    public VarSet[] edgeFeatureVarSet;
+  
+    public FactorTable(int nodeFeatureNum, int edgeFeatureNum){
 
-
-    public FactorTable(){
+        this.nodeFeatureFactor = new Factor[nodeFeatureNum];
+        this.edgeFeatureFactor = new Factor[edgeFeatureNum];
+        this.nodeFeatureProb = new double[nodeFeatureNum][3*3];
+        this.edgeFeatureProb = new double[edgeFeatureNum][3*3];
+        this.nodeFeatureCountAll = new double[nodeFeatureNum];
+        this.edgeFeatureCountAll = new double[edgeFeatureNum];
+        this.nodeFeatureVarSet = new HashVarSet[nodeFeatureNum];
+        this.edgeFeatureVarSet = new HashVarSet[edgeFeatureNum];
 
         for(int i=0; i< Constant.nodeFeatureNames.length; i++) {
 
@@ -85,14 +93,16 @@ public class FactorTable {
                     this.nodeFeatureProb[i][j] /= this.nodeFeatureCountAll[i];
                 }
 
-                this.nodeFeatureFactor[i] = new TableFactor(nodeFeatureVarSet[i], this.nodeFeatureProb[i]);
+                this.nodeFeatureFactor[i] = new TableFactor(nodeFeatureVarSet[i],
+                        this.nodeFeatureProb[i]);
             }
             for(int i=0; i<edgeFeatureNum; i++) {
                 for (int j = 0; j < this.edgeFeatureProb[i].length; j++) {
                     this.edgeFeatureProb[i][j] /= this.edgeFeatureCountAll[i];
                 }
 
-                this.edgeFeatureFactor[i] = new TableFactor(edgeFeatureVarSet[i], this.edgeFeatureProb[i]);
+                this.edgeFeatureFactor[i] = new TableFactor(edgeFeatureVarSet[i],
+                        this.edgeFeatureProb[i]);
             }
         }
 
