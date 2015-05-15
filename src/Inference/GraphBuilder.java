@@ -78,5 +78,6 @@ public class GraphBuilder {
 
         Inferencer inf = new JunctionTreeInferencer();
         inf.computeMarginals(mdl);
+
     }
 }
