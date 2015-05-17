@@ -84,10 +84,14 @@ public class OptimizeCRF implements ByGradientValue {
 
   @Override
   public double getValue() {
+    System.out.println("start getValue");
     double logLH = 0.0;
     int pt = 0;
-    for (int i = 0; i < threads.length; i++)
+    for (int i = 0; i < threads.length; i++) {
+      System.out.print(i + " ");
       logZ[i] = getLogPartitionValue(threads[i]);
+      System.out.print(logZ[i] + "\n");
+    }
     for (Thread thread : threads) {
       int pf = 0;
       double threadSum = 0.0;
@@ -109,17 +113,34 @@ public class OptimizeCRF implements ByGradientValue {
       pt++;
       logLH += threadSum;
     }
+    System.out.println("getValue: " + logLH);
     return logLH;
   }
 
   double[] getModelExpec(Thread thread, double[] params) {
+    System.out.println("start getModelExpec");
     double[] modelExpec = new double[params.length];
     int nodeFeatureNum = thread.nodeFeatureNum;
-    int edgeFeatureNum = thread.nodeFeatureNum;
+    int edgeFeatureNum = thread.edgeFeatureNum;
     int nodeCount = thread.nodes.size();
-    VarSet[] xNode = new VarSet[nodeFeatureNum];
-    VarSet[] xEdge = new VarSet[edgeFeatureNum];
-    VarSet y = new HashVarSet();
+    VarSet[] xNode = new HashVarSet[nodeFeatureNum];
+    for (int f = 0; f < nodeFeatureNum; f++) {
+      Variable[] tmp = new Variable[nodeCount];
+      for (int v = 0; v < nodeCount; v++)
+        tmp[v] = new Variable(thread.nodeFeatures[f].choiceNum);
+      xNode[f] = new HashVarSet(tmp);
+    }
+    VarSet[] xEdge = new HashVarSet[edgeFeatureNum];
+    for (int f = 0; f < edgeFeatureNum; f++) {
+      Variable[] tmp = new Variable[nodeCount - 1];
+      for (int v = 0; v < nodeCount - 1; v++)
+        tmp[v] = new Variable(thread.edgeFeatures[f].choiceNum);
+      xEdge[f] = new HashVarSet(tmp);
+    }
+    Variable[] tmp = new Variable[nodeCount];
+    for (int v = 0; v < nodeCount; v++)
+      tmp[v] = new Variable(3);
+    VarSet y = new HashVarSet(tmp);
 
     FactorGraph graph = graphBuilder.buildWithCRF(xNode, xEdge, y, thread, params);
     Inferencer inf = new TRP();
@@ -152,11 +173,13 @@ public class OptimizeCRF implements ByGradientValue {
         }
       }
     }
+    System.out.println("finish getModelExpec");
     return modelExpec;
   }
 
   @Override
   public void getValueGradient(double[] gradient) {
+    System.out.println("start getValueGradient");
     for (int i = 0; i < gradient.length; i++)
       gradient[i] = 0.0;
     for (Thread thread : threads) {
@@ -173,6 +196,7 @@ public class OptimizeCRF implements ByGradientValue {
         gradient[i] -= modelExpec[i];
       }
     }
+    System.out.println("finish getValueGradient");
   }
 
   public static void main(String[] args) {
@@ -187,7 +211,9 @@ public class OptimizeCRF implements ByGradientValue {
 
     System.out.println("==========Start Learning==========");
     double[] init_params = new double[dataset.featureNum];
-		OptimizeCRF crf = new OptimizeCRF(init_params, dataset);
+    for (int p = 0; p < dataset.featureNum; p++)
+      init_params[p] = 1.0;
+    OptimizeCRF crf = new OptimizeCRF(init_params, dataset);
     Optimizer opt = new LimitedMemoryBFGS(crf);
 		boolean converged = false;
 		try {

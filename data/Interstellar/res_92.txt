@@ -1,3 +1,0 @@
-{"name": "\u5317\u98ce\u6c34\u6bcd", "parent": "-1", "number": "0", "label": "1", "mention": [], "depth": "0", "vector": [[0, 2], [29, 1], [54, 1], [78, 2], [1004, 1], [1485, 1], [2013, 1]], "hashtag": [], "id": "3777678009762718", "emoji": []}
-{"name": "CHAOS\u662f\u8d85\u9ad8\u6821\u7ea7\u7684\u6b3a\u8bc8\u5e08", "parent": "0", "number": "1", "label": "-1", "mention": [], "depth": "1", "vector": [[0, 2], [29, 1], [31, 1], [1391, 1], [1602, 1]], "hashtag": [], "id": "3777678009762718", "emoji": []}
-{"name": "\u5317\u98ce\u6c34\u6bcd", "parent": "1", "number": "2", "label": "-1", "mention": [], "depth": "2", "vector": [[0, 2], [35, 1], [36, 1], [228, 1], [1391, 1], [1602, 1], [1706, 1]], "hashtag": [], "id": "3777678009762718", "emoji": []}
