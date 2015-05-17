@@ -1,16 +1,9 @@
 package Inference;
 
 import Microblog.EdgeFeature;
-import Microblog.Node;
 import Microblog.NodeFeature;
 import Microblog.Thread;
-import Utils.Constant;
-import cc.mallet.grmm.inference.Inferencer;
-import cc.mallet.grmm.inference.JunctionTreeInferencer;
 import cc.mallet.grmm.types.*;
-
-import javax.swing.text.TabExpander;
-import java.lang.ThreadGroup;
 
 public class GraphBuilder {
 
@@ -73,6 +66,7 @@ public class GraphBuilder {
                 edgeVariableCur += 1;
             }
         }
+      return mdl;
     }
 
 

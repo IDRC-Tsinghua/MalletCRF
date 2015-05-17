@@ -1,4 +1,3 @@
-import Inference.FactorTable;
 import Inference.GraphBuilder;
 import Microblog.*;
 import Microblog.Thread;
@@ -121,8 +120,8 @@ public class OptimizeCRF implements ByGradientValue {
     VarSet[] xNode = new VarSet[nodeFeatureNum];
     VarSet[] xEdge = new VarSet[edgeFeatureNum];
     VarSet y = new HashVarSet();
-    // TODO: change the definition of build function
-    FactorGraph graph = graphBuilder.build(new FactorTable(), thread);
+
+    FactorGraph graph = graphBuilder.buildWithCRF(xNode, xEdge, y, thread, params);
     Inferencer inf = new TRP();
     inf.computeMarginals(graph);
     for (int i = 0; i < nodeFeatureNum; i++) {
