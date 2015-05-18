@@ -1,5 +1,7 @@
 package Microblog;
 
+import Utils.Constant;
+
 import java.util.ArrayList;
 
 /**
@@ -43,7 +45,8 @@ public class WordFeature extends NodeFeature {
     // compute potentials
     this.potentials = new double[nodes.size()][this.choiceNum*3];
     for (int n = 0; n < nodes.size(); n++) {
-      // potentials should be all 0.0 as default
+      for (int p = 0; p < this.choiceNum * 3; p++)
+        this.potentials[n][p] = Constant.minPtl;
       switch (this.polarity) {
         case 0:
           this.potentials[n][3] = 1.0;

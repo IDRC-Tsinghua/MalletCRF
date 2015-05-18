@@ -1,5 +1,7 @@
 package Microblog;
 
+import Utils.Constant;
+
 import java.util.ArrayList;
 
 abstract public class NodeFeature extends Feature {
@@ -38,6 +40,8 @@ class NodeEmoji extends NodeFeature {
     // compute potentials
     this.potentials = new double[nodes.size()][this.choiceNum*3];
     for (int n = 0; n < nodes.size(); n++) {
+      for (int p = 0; p < this.choiceNum * 3; p++)
+        this.potentials[n][p] = Constant.minPtl;
       this.potentials[n][0] = 1.0;
       this.potentials[n][4] = 1.0;
       this.potentials[n][8] = 1.0;
