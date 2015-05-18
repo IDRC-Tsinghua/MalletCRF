@@ -50,12 +50,17 @@ public class BayesianNetwork {
         y = new Variable[nodeCnt];
 
         for(int n=0; n<nodeCnt; n++) {
+
             // generate each factor to each node
-            FactorTable ftItem = factorTable;
+            // FactorTable ftItem = factorTable;
             // set node and edge varset with local variables
             ftItem.setNodeFeatureVarSet(xNode[n], y[n]);
             // add node feature of factor
             for(int i=0; i<this.nodeFeatureNum; i++) {
+                int x = thread.nodeFeatures[i].x[n];
+                FactorTable ftItem;
+                ftItem = factorTable.
+
                 // set node feature factor
                 ftItem.nodeFeatureFactor[i] = new TableFactor(
                         ftItem.nodeFeatureVarSet[i],
@@ -87,16 +92,13 @@ public class BayesianNetwork {
         // int nodeFeatureNum = thread.nodeFeatureNum;
         // int edgeFeatureNum = thread.edgeFeatureNum;
         // int nodeSize = thread.nodes.size();
-        VarSet ySet = new HashVarSet(y);
-        Factor ptl = inf.lookupMarginal(ySet);
-        int yCur = 0;
-        for (AssignmentIterator it = ptl.assignmentIterator (); it.hasNext (); it.next()) {
-            int outcome = it.indexOfCurrentAssn ();
-            System.out.println (y[yCur]+"  "+outcome+"   "+ptl.value (it));
-            yCur ++;
+        for (Variable var: y) {
+            Factor ptl = inf.lookupMarginal(var);
+            for (AssignmentIterator it = ptl.assignmentIterator (); it.hasNext (); it.next()) {
+                int outcome = it.indexOfCurrentAssn ();
+                System.out.println (var+"  "+outcome+"   "+ptl.value (it));
+            }
         }
-
-
     }
 
     public static void main(String[] args) {
@@ -114,7 +116,7 @@ public class BayesianNetwork {
         factorTable.Stats(threads, nodeFeatureNum, edgeFeatureNum);
 
         // factor graph
-        // TODO: Test data
+        // TODO: Test data: regard thread[0] as testdata
         BayesianNetwork bn = new BayesianNetwork(factorTable,  threads[0]);
         bn.inference();
     }
