@@ -10,16 +10,22 @@ public class FactorTable {
     public Factor[] nodeFeatureFactor;
     public Factor[] edgeFeatureFactor;
 
+    public int nodeFeatureNum;
+    public int edgeFeatureNum;
+
+    // probability
     public double[][] nodeFeatureProb;
     public double[][] edgeFeatureProb;
     public double[] nodeFeatureCountAll;
     public double[] edgeFeatureCountAll;
 
+    // variables in the factorTable
     public Variable[] nodeVariables;
     public Variable[] edgeVariables;
     public Variable yVariable;
-    public Variable yParentVariable
+    public Variable yParentVariable;
 
+    //
     public VarSet[] nodeFeatureVarSet;
     public VarSet[] edgeFeatureVarSet;
   
@@ -28,6 +34,8 @@ public class FactorTable {
         // init
         this.nodeFeatureFactor = new Factor[nodeFeatureNum];
         this.edgeFeatureFactor = new Factor[edgeFeatureNum];
+        this.nodeFeatureNum = nodeFeatureNum;
+        this.edgeFeatureNum = edgeFeatureNum;
         this.nodeFeatureProb = new double[nodeFeatureNum][3*3];
         this.edgeFeatureProb = new double[edgeFeatureNum][3*3];
         this.nodeFeatureCountAll = new double[nodeFeatureNum];
@@ -59,6 +67,28 @@ public class FactorTable {
             });
         }
          **/
+    }
+
+    public void setNodeFeatureVarSet(Variable[] xNode, Variable y) {
+
+        for(int i=0; i<this.nodeFeatureNum; i++) {
+
+            this.nodeFeatureVarSet[i] = new HashVarSet(new Variable[]{
+                    xNode[i],
+                    y
+            });
+        }
+    }
+
+    public void setEdgeFeatureVarSet(Variable[] xEdge, Variable y, Variable yParent) {
+
+        for(int i=0; i<this.edgeFeatureNum; i++) {
+            this.edgeFeatureVarSet[i] = new HashVarSet(new Variable[]{
+                    xEdge[i],
+                    y,
+                    yParent
+            });
+        }
     }
 
     public void Stats(Microblog.Thread[] threads,
@@ -101,17 +131,13 @@ public class FactorTable {
                 }
             }
 
-            // normalize
+            // normalize and given result
             for(int i=0; i<nodeFeatureNum; i++) {
                 for (int j=0; j<this.nodeFeatureProb[i].length; j++) {
                     this.nodeFeatureProb[i][j] /= this.nodeFeatureCountAll[i];
                 }
 
-                nodeFeatureVarSet[i] = new HashVarSet(new Variable[]{
-                        nodeVariables[i],
-                        yVariable
-
-                });
+                this.setNodeFeatureVarSet(nodeVariables, yVariable);
                 this.nodeFeatureFactor[i] = new TableFactor(nodeFeatureVarSet[i],
                         this.nodeFeatureProb[i]);
             }
@@ -119,11 +145,8 @@ public class FactorTable {
                 for (int j = 0; j < this.edgeFeatureProb[i].length; j++) {
                     this.edgeFeatureProb[i][j] /= this.edgeFeatureCountAll[i];
                 }
-                edgeFeatureVarSet[i] = new HashVarSet(new Variable[]{
-                        edgeVariables[i],
-                        yVariable,
-                        yParentVariable
-                });
+
+                this.setEdgeFeatureVarSet(edgeVariables, yVariable, yParentVariable);
                 this.edgeFeatureFactor[i] = new TableFactor(edgeFeatureVarSet[i],
                         this.edgeFeatureProb[i]);
             }
