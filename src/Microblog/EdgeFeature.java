@@ -1,5 +1,7 @@
 package Microblog;
 
+import Utils.Constant;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,6 +33,8 @@ class SameAuthor extends EdgeFeature {
 		// compute potentials
 		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
 		for (int n = 1; n < nodes.size(); n++) {
+			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
+				this.potentials[n - 1][p] = Constant.minPtl;
 			this.potentials[n-1][9] = 1.0;
 			this.potentials[n-1][13] = 1.0;
 			this.potentials[n-1][17] = 1.0;
@@ -62,6 +66,8 @@ class Similarity extends EdgeFeature {
 		// compute potentials
 		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
 		for (int n = 1; n < nodes.size(); n++) {
+			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
+				this.potentials[n - 1][p] = Constant.minPtl;
 			this.potentials[n-1][9] = 1.0;
 			this.potentials[n-1][13] = 1.0;
 			this.potentials[n-1][17] = 1.0;
@@ -93,6 +99,8 @@ class Difference extends EdgeFeature {
 		// compute potentials
 		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
 		for (int n = 1; n < nodes.size(); n++) {
+			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
+				this.potentials[n - 1][p] = Constant.minPtl;
 			this.potentials[n-1][10] = 1.0;
 			this.potentials[n-1][11] = 1.0;
 			this.potentials[n-1][12] = 1.0;
@@ -124,6 +132,8 @@ class SentimentProp extends EdgeFeature {
 		// compute potentials
 		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
 		for (int n = 1; n < nodes.size(); n++) {
+			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
+				this.potentials[n - 1][p] = Constant.minPtl;
 			this.potentials[n-1][9] = 1.0;
 			this.potentials[n-1][13] = 1.0;
 			this.potentials[n-1][17] = 1.0;
@@ -154,6 +164,8 @@ class AuthorRef extends EdgeFeature {
 		// compute potentials
 		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
 		for (int n = 1; n < nodes.size(); n++) {
+			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
+				this.potentials[n - 1][p] = Constant.minPtl;
 			this.potentials[n-1][9] = 1.0;
 			this.potentials[n-1][13] = 1.0;
 			this.potentials[n-1][17] = 1.0;
@@ -187,6 +199,8 @@ class HashTag extends EdgeFeature {
 		// compute potentials
 		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
 		for (int n = 1; n < nodes.size(); n++) {
+			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
+				this.potentials[n - 1][p] = Constant.minPtl;
 			this.potentials[n-1][9] = 1.0;
 			this.potentials[n-1][13] = 1.0;
 			this.potentials[n-1][17] = 1.0;
@@ -220,6 +234,8 @@ class SameEmoji extends EdgeFeature {
 		// compute potentials
 		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
 		for (int n = 1; n < nodes.size(); n++) {
+			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
+				this.potentials[n - 1][p] = Constant.minPtl;
 			this.potentials[n-1][9] = 1.0;
 			this.potentials[n-1][13] = 1.0;
 			this.potentials[n-1][17] = 1.0;
@@ -248,6 +264,8 @@ class FollowRoot extends EdgeFeature {
 		// compute potentials
 		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
 		for (int n = 1; n < nodes.size(); n++) {
+			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
+				this.potentials[n - 1][p] = Constant.minPtl;
 			this.potentials[n-1][9] = 1.0;
 			this.potentials[n-1][13] = 1.0;
 			this.potentials[n-1][17] = 1.0;

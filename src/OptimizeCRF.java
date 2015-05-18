@@ -173,7 +173,7 @@ public class OptimizeCRF implements ByGradientValue {
         }
       }
     }
-    System.out.println("finish getModelExpec");
+    System.out.println(modelExpec[0]);
     return modelExpec;
   }
 
