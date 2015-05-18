@@ -75,14 +75,6 @@ public class BayesianNetwork {
 
             }
         }
-
-        /*
-        for(int j=1; j<nodeCnt; j++) {
-            this.xEdge[j] = factorTable.edgeVariables;
-            this.y[j-1] = factorTable.yParentVariable;
-        }
-        */
-
     }
     public void inference() {
 
