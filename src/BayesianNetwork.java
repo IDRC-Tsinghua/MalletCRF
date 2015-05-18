@@ -4,10 +4,7 @@ import Microblog.Thread;
 import Utils.Constant;
 import cc.mallet.grmm.inference.Inferencer;
 import cc.mallet.grmm.inference.JunctionTreeInferencer;
-import cc.mallet.grmm.types.Factor;
-import cc.mallet.grmm.types.FactorGraph;
-import cc.mallet.grmm.types.TableFactor;
-import cc.mallet.grmm.types.VarSet;
+import cc.mallet.grmm.types.*;
 
 /**
  * Created by root on 5/15/15.
@@ -15,28 +12,58 @@ import cc.mallet.grmm.types.VarSet;
 public class BayesianNetwork {
 
     public FactorTable factorTable;
+    public FactorGraph mdl;
+
+    public Thread thread;
     public int nodeFeatureNum;
     public int edgeFeatureNum;
     public VarSet y;
+    public Factor[][] nodeFactors;
+    public Factor[][] edgeFactors;
 
-    public FactorGraph buildWithBN(FactorTable factorTable, Thread thread) {
+    public VarSet[][] xNode;
+    public VarSet[][] xEdge;
 
-        FactorGraph mdl = new FactorGraph();
-        for (Node node: thread.nodes) {
+    /*
+     Build the Graph
 
-            for (Factor nodeFactor : factorTable.nodeFeatureFactor) {
-                mdl.addFactor(nodeFactor);
-            }
-            for (Factor edgeFactor : factorTable.edgeFeatureFactor) {
-                mdl.addFactor(edgeFactor);
+     */
+    public BayesianNetwork(FactorTable factorTable, Thread thread) {
+
+        // init
+        this.factorTable = factorTable;
+        this.thread = thread;
+        mdl = new FactorGraph();
+        this.nodeFeatureNum = thread.nodeFeatureNum;
+        this.edgeFeatureNum = thread.edgeFeatureNum;
+        int nodeCnt = thread.nodes.size();
+        nodeFactors = new Factor[nodeFeatureNum][nodeCnt];
+        edgeFactors = new Factor[edgeFeatureNum][nodeCnt];
+        xNode = new VarSet[nodeFeatureNum][nodeCnt];
+        xEdge = new VarSet[edgeFeatureNum][nodeCnt];
+
+
+        for(int i=0; i<this.nodeFeatureNum; i++) {
+            for(int j=0; j<nodeCnt; j++) {
+
+                this.nodeFactors[j][i] = factorTable.nodeFeatureFactor[i];
+                xNode[i] = factorTable.nodeFeatureVarSet; // fix the xNode varset
+                mdl.addFactor(this.nodeFactors[j][i]);
             }
         }
-        return mdl;
+
+        for(int i=0; i<this.edgeFeatureNum; i++) {
+            for(int j=0; j<nodeCnt; j++) {
+
+                this.edgeFactors[j][i] = factorTable.edgeFeatureFactor[i];
+                xEdge[i] = factorTable.edgeFeatureVarSet;// fix the edgeNode va
+                mdl.addFactor(this.edgeFactors[j][i]);
+            }
+
+        }
+
     }
-
-
-    public void inference(FactorGraph mdl,
-                          Microblog.Thread thread) {
+    public void inference() {
 
         Inferencer inf = new JunctionTreeInferencer();
         inf.computeMarginals(mdl);
@@ -44,10 +71,10 @@ public class BayesianNetwork {
         int edgeFeatureNum = thread.edgeFeatureNum;
         int nodeSize = thread.nodes.size();
         for(int n = 0; n < nodeFeatureNum; n++) {
-
             NodeFeature nodeFeature = thread.nodeFeatures[n];
             for(int j = 0; j < nodeSize; j++) {
                 // Factor single = inf.lookupMarginal();
+
             }
 
         }

@@ -32,15 +32,15 @@ public class FactorTable {
         for(int i=0; i< Constant.nodeFeatureNames.length; i++) {
 
             nodeFeatureVarSet[i] = new HashVarSet(new Variable[]{
-                    new Variable(3), // node label
-                    new Variable(3)  // parent label
+                    new Variable(3), // abstract value
+                    new Variable(3)  // y label
             });
         }
 
         for(int i=0; i< Constant.edgeFeatureNames.length; i++) {
             edgeFeatureVarSet[i] = new HashVarSet(new Variable[]{
 
-                    new Variable(2), // choice num
+                    new Variable(2), // abstract value
                     new Variable(3), // cur label
                     new Variable(3)  // parent label
             });
