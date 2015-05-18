@@ -1,7 +1,5 @@
 package Microblog;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -34,7 +32,7 @@ public class Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		int pf = featureNames.length;
+		/*int pf = featureNames.length;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("data/positive.txt"));
 			String line;
@@ -60,7 +58,7 @@ public class Thread {
 			br.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		this.nodeFeatureNum = this.nodeFeatures.length;
 	}
 
@@ -106,8 +104,8 @@ public class Thread {
 
 	public void showFeatureValues() {
 		if (this.nodeFeatures != null && this.edgeFeatures != null) {
-			for (NodeFeature nodefeature : this.nodeFeatures)
-				System.out.println(nodefeature.name + ": " + Arrays.toString(nodefeature.x));
+			//for (NodeFeature nodefeature : this.nodeFeatures)
+			System.out.println(this.nodeFeatures[0].name + ": " + Arrays.toString(this.nodeFeatures[0].x));
 			for (EdgeFeature edgefeature : this.edgeFeatures)
 				System.out.println(edgefeature.name + ": " + Arrays.toString(edgefeature.x));
 		} else {

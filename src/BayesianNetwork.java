@@ -1,10 +1,14 @@
 import Inference.FactorTable;
-import Microblog.*;
+import Microblog.Node;
+import Microblog.NodeFeature;
 import Microblog.Thread;
-import Utils.Constant;
 import cc.mallet.grmm.inference.Inferencer;
 import cc.mallet.grmm.inference.JunctionTreeInferencer;
 import cc.mallet.grmm.types.*;
+import cc.mallet.grmm.types.Factor;
+import cc.mallet.grmm.types.FactorGraph;
+import cc.mallet.grmm.types.VarSet;
+
 
 /**
  * Created by root on 5/15/15.

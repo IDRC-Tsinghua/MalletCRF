@@ -70,7 +70,7 @@ public class SimpleGraphExample {
     }
     Factor pair = inf.lookupMarginal(new HashVarSet(new Variable[] {allVars[2], allVars[3]}));
     for (AssignmentIterator it = pair.assignmentIterator(); it.hasNext(); it.next()) {
-      System.out.println(it.indexOfCurrentAssn() + " " + pair.value(it));
+      System.out.println(it.assignment().get(allVars[2]) + " " + it.assignment().get(allVars[3]) + " " + pair.value(it));
     }
 
   }
