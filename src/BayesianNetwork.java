@@ -52,14 +52,13 @@ public class BayesianNetwork {
         for(int n=0; n<nodeCnt; n++) {
 
             // generate each factor to each node
-            // FactorTable ftItem = factorTable;
+            FactorTable ftItem = factorTable;
             // set node and edge varset with local variables
             ftItem.setNodeFeatureVarSet(xNode[n], y[n]);
             // add node feature of factor
             for(int i=0; i<this.nodeFeatureNum; i++) {
                 int x = thread.nodeFeatures[i].x[n];
-                FactorTable ftItem;
-                ftItem = factorTable.
+
 
                 // set node feature factor
                 ftItem.nodeFeatureFactor[i] = new TableFactor(
@@ -68,6 +67,11 @@ public class BayesianNetwork {
                 );
                 this.nodeFactors[n][i] = ftItem.nodeFeatureFactor[i];
                 mdl.addFactor(this.nodeFactors[n][i]);
+
+                double[] singlePtl = new double[xNode[n][i].getNumOutcomes()];
+                singlePtl[thread.nodeFeatures[i].x[n]] = 1.0;
+                Factor single = new TableFactor(xNode[n][i], singlePtl);
+                mdl.addFactor(single);
             }
 
             if(n == 0) continue;
@@ -82,6 +86,10 @@ public class BayesianNetwork {
                 this.edgeFactors[n][i] = ftItem.edgeFeatureFactor[i];
                 mdl.addFactor(this.edgeFactors[n][i]);
 
+                double[] singlePtl = new double[xEdge[n][i].getNumOutcomes()];
+                singlePtl[thread.edgeFeatures[i].x[n]] = 1.0;
+                Factor single = new TableFactor(xEdge[n][i], singlePtl);
+                mdl.addFactor(single);
             }
         }
     }
