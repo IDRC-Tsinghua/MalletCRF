@@ -15,11 +15,17 @@ public class FactorTable {
     public double[] nodeFeatureCountAll;
     public double[] edgeFeatureCountAll;
 
+    public Variable[] nodeVariables;
+    public Variable[] edgeVariables;
+    public Variable yVariable;
+    public Variable yParentVariable
+
     public VarSet[] nodeFeatureVarSet;
     public VarSet[] edgeFeatureVarSet;
   
     public FactorTable(int nodeFeatureNum, int edgeFeatureNum){
 
+        // init
         this.nodeFeatureFactor = new Factor[nodeFeatureNum];
         this.edgeFeatureFactor = new Factor[edgeFeatureNum];
         this.nodeFeatureProb = new double[nodeFeatureNum][3*3];
@@ -29,11 +35,20 @@ public class FactorTable {
         this.nodeFeatureVarSet = new HashVarSet[nodeFeatureNum];
         this.edgeFeatureVarSet = new HashVarSet[edgeFeatureNum];
 
+        // variable init
+        this.nodeVariables = new Variable[nodeFeatureNum];
+        this.edgeVariables = new Variable[edgeFeatureNum];
+        for(int i=0; i<nodeVariables.length; i++)
+            this.nodeVariables[i] = new Variable(3);
+        for(int i=0; i<edgeVariables.length; i++)
+            this.edgeVariables[i] = new Variable(2);
+        this.yVariable = new Variable(3);
+        this.yParentVariable = new Variable(3);
+        /**
         for(int i=0; i< Constant.nodeFeatureNames.length; i++) {
 
             nodeFeatureVarSet[i] = new HashVarSet(new Variable[]{
-                    new Variable(3), // abstract value
-                    new Variable(3)  // y label
+                   nodeVariables
             });
         }
 
@@ -41,10 +56,9 @@ public class FactorTable {
             edgeFeatureVarSet[i] = new HashVarSet(new Variable[]{
 
                     new Variable(2), // abstract value
-                    new Variable(3), // cur label
-                    new Variable(3)  // parent label
             });
         }
+         **/
     }
 
     public void Stats(Microblog.Thread[] threads,
@@ -93,6 +107,11 @@ public class FactorTable {
                     this.nodeFeatureProb[i][j] /= this.nodeFeatureCountAll[i];
                 }
 
+                nodeFeatureVarSet[i] = new HashVarSet(new Variable[]{
+                        nodeVariables[i],
+                        yVariable
+
+                });
                 this.nodeFeatureFactor[i] = new TableFactor(nodeFeatureVarSet[i],
                         this.nodeFeatureProb[i]);
             }
@@ -100,7 +119,11 @@ public class FactorTable {
                 for (int j = 0; j < this.edgeFeatureProb[i].length; j++) {
                     this.edgeFeatureProb[i][j] /= this.edgeFeatureCountAll[i];
                 }
-
+                edgeFeatureVarSet[i] = new HashVarSet(new Variable[]{
+                        edgeVariables[i],
+                        yVariable,
+                        yParentVariable
+                });
                 this.edgeFeatureFactor[i] = new TableFactor(edgeFeatureVarSet[i],
                         this.edgeFeatureProb[i]);
             }
