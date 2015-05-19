@@ -9,6 +9,8 @@ import cc.mallet.grmm.types.Factor;
 import cc.mallet.grmm.types.FactorGraph;
 import cc.mallet.grmm.types.VarSet;
 
+import java.util.Objects;
+
 
 /**
  * Created by root on 5/15/15.
@@ -52,8 +54,15 @@ public class BayesianNetwork {
         for(int n=0; n<nodeCnt; n++) {
 
             // generate each factor to each node
-            FactorTable ftItem = factorTable;
+            FactorTable ftItem = factorTable.clone();
             // set node and edge varset with local variables
+            for (int i=0; i < nodeFeatureNum; i++)
+                xNode[n][i] = new Variable(3);
+            for (int i=0; i < edgeFeatureNum; i++)
+                xEdge[n][i] = new Variable(2);
+            y[n] = new Variable(3);
+
+
             ftItem.setNodeFeatureVarSet(xNode[n], y[n]);
             // add node feature of factor
             for(int i=0; i<this.nodeFeatureNum; i++) {
@@ -87,7 +96,7 @@ public class BayesianNetwork {
                 mdl.addFactor(this.edgeFactors[n][i]);
 
                 double[] singlePtl = new double[xEdge[n][i].getNumOutcomes()];
-                singlePtl[thread.edgeFeatures[i].x[n]] = 1.0;
+                singlePtl[thread.edgeFeatures[i].x[n-1]] = 1.0;
                 Factor single = new TableFactor(xEdge[n][i], singlePtl);
                 mdl.addFactor(single);
             }
@@ -116,7 +125,7 @@ public class BayesianNetwork {
         Thread[] threads = dataReader.readData("data/Interstellar"); // foobar
 
         DataSet dataset = new DataSet(threads);
-        System.out.println(dataset.getThreadNum());
+        // System.out.println(dataset.getThreadNum());
         //
         int nodeFeatureNum = Constant.nodeFeatureNames.length;
         int edgeFeatureNum = Constant.edgeFeatureNames.length;
