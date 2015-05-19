@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 abstract public class EdgeFeature extends Feature {
-	String name = "EdgeFeature";
+	public String name = "EdgeFeature";
 }
 
 class SameAuthor extends EdgeFeature {

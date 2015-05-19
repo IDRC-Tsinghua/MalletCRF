@@ -15,7 +15,7 @@ public class Constant {
     public static int neuDictLength = 335;
     public static int negDictLength = 328;
     public static int sentimentDictLength = 1008;
-    public static double minPtl = 0.001; // use a small double to stand for 0.0 in potentials
+    public static double minPtl = 0.0001; // use a small double to stand for 0.0 in potentials
 
     public static final Map<String, String> featureFactorMap = new HashMap<String, String>();
     static {

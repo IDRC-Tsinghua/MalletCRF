@@ -21,11 +21,11 @@ public class Node {
 
   public Node(JSONObject obj) {
     try {
-      name = obj.getString("name");
-      parent = Integer.parseInt(obj.getString("parent"));
-      number = Integer.parseInt(obj.getString("number"));
-      label = Integer.parseInt(obj.getString("label")) + 1;
-      depth = Integer.parseInt(obj.getString("depth"));
+      name = obj.getString("username");
+      parent = obj.getInt("parent");
+      number = obj.getInt("docid");
+      label = obj.getInt("label") + 1;
+      //depth = obj.getInt("depth");
       JSONArray mentionArray = obj.getJSONArray("mention");
       mention = new String[mentionArray.length()];
       for (int i = 0; i < mentionArray.length(); i++)

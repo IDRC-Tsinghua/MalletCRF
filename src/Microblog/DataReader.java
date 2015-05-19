@@ -14,21 +14,28 @@ public class DataReader {
   public Thread[] readData(String path) {
     File dataPath = new File(path);
     File[] datafiles = dataPath.listFiles();
-    int thread_num = datafiles.length;
-    Thread[] dataset = new Thread[thread_num];
+    ArrayList<Thread> dataset = new ArrayList<>();
     int pfile = 0;
+    ArrayList<Node> nodes = null;
+    long preThreadID = 0;
     for (File file : datafiles) {
       //System.out.println(file);
-      ArrayList<Node> nodes = new ArrayList<>();
-      long threadID = 0;
       try {
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line;
         while ((line = br.readLine()) != null) {
           JSONObject obj = new JSONObject(line);
+          long curThreadID = Long.parseLong(obj.getString("threadid"));
+          if (curThreadID != preThreadID) {
+            if (nodes != null) {
+              dataset.add(new Thread(preThreadID, nodes));
+              pfile++;
+            }
+            nodes = new ArrayList<>();
+          }
+          //if (nodes.size() < 5)
           nodes.add(new Node(obj));
-          if (threadID == 0)
-            threadID = Long.parseLong(obj.getString("id"));
+          preThreadID = curThreadID;
         }
         br.close();
       } catch (Exception e) {
@@ -36,9 +43,7 @@ public class DataReader {
       }
       /*for (Node node : nodes)
         System.out.println(node.toString());*/
-      dataset[pfile] = new Thread(threadID, nodes);
-      pfile++;
     }
-    return dataset;
+    return dataset.toArray(new Thread[dataset.size()]);
   }
 }

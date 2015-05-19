@@ -21,12 +21,13 @@ public class GraphBuilder {
         for(int i=0; i<thread.nodeFeatures.length; i++) {
             // for each node
             NodeFeature nodeFeature = thread.nodeFeatures[i];
-            int nodeVariableCur = 0;
             for(int j=0; j<thread.nodes.size(); j++) {
-
+                // exclude factors of wordFeature when x=0, for the efficiency concerns
+                if (i > 0 && nodeFeature.x[j] == 0)
+                    continue;
                 VarSet varSet = new HashVarSet(new Variable[]{
-                        xNode[i].get(nodeVariableCur),
-                        y.get(nodeVariableCur)
+                    xNode[i].get(j),
+                    y.get(j)
                 });
 
                 // potentialValue
@@ -42,18 +43,22 @@ public class GraphBuilder {
                 singlePtl[nodeFeature.x[j]] = 1.0;
                 Factor single = new TableFactor(xNode[i].get(j), singlePtl);
                 mdl.addFactor(single);
-                nodeVariableCur += 1;
             }
         }
 
         // for each edge feature
         for(int i=0; i<thread.edgeFeatures.length; i++) {
             // for each node, from the second node
-
             EdgeFeature edgeFeature = thread.edgeFeatures[i];
             for(int j=1; j<thread.nodes.size(); j++) {
-                VarSet varSet = new HashVarSet(new Variable[]{
-
+                VarSet varSet;
+                if (edgeFeature.name == "FollowRoot")
+                    varSet = new HashVarSet(new Variable[]{
+                        xEdge[i].get(j - 1),
+                        y.get(0),
+                        y.get(j)
+                    });
+                else varSet = new HashVarSet(new Variable[]{
                     xEdge[i].get(j - 1),
                     y.get(thread.nodes.get(j).parent),
                     y.get(j)

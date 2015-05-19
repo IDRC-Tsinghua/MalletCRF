@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 abstract public class Feature {
-	String name = "Feature";
+	public String name = "Feature";
 	public int choiceNum = 2;
-	double simThreshold = 0.4;
-	double diffThreshold = 0.2;
+	double simThreshold = 0.2;
+	double diffThreshold = 0.0;
 	public int[] x;
 	public double[] values;
 	public double[][] potentials;
