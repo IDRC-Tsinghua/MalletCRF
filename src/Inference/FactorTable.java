@@ -37,7 +37,7 @@ public class FactorTable {
         this.nodeFeatureNum = nodeFeatureNum;
         this.edgeFeatureNum = edgeFeatureNum;
         this.nodeFeatureProb = new double[nodeFeatureNum][3*3];
-        this.edgeFeatureProb = new double[edgeFeatureNum][3*3];
+        this.edgeFeatureProb = new double[edgeFeatureNum][2*3*3];
         this.nodeFeatureCountAll = new double[nodeFeatureNum];
         this.edgeFeatureCountAll = new double[edgeFeatureNum];
         this.nodeFeatureVarSet = new HashVarSet[nodeFeatureNum];
@@ -69,6 +69,25 @@ public class FactorTable {
          **/
     }
 
+    public FactorTable clone() {
+        FactorTable obj = new FactorTable(this.nodeFeatureNum, this.edgeFeatureNum);
+        obj.nodeFeatureFactor = this.nodeFeatureFactor;
+        obj.edgeFeatureFactor = this.edgeFeatureFactor;
+        obj.nodeFeatureNum = this.nodeFeatureNum;
+        obj.edgeFeatureNum = this.edgeFeatureNum;
+        obj.nodeVariables = this.nodeVariables;
+        obj.edgeVariables = this.edgeVariables;
+        obj.yParentVariable = this.yParentVariable;
+        obj.yVariable = this.yVariable;
+        obj.nodeFeatureVarSet = this.nodeFeatureVarSet;
+        obj.edgeFeatureVarSet = this.edgeFeatureVarSet;
+        obj.nodeFeatureProb = this.nodeFeatureProb;
+        obj.edgeFeatureProb = this.edgeFeatureProb;
+        obj.nodeFeatureCountAll = this.nodeFeatureCountAll;
+        obj.edgeFeatureCountAll = this.edgeFeatureCountAll;
+        return obj;
+    }
+
     public void setNodeFeatureVarSet(Variable[] xNode, Variable y) {
 
         for(int i=0; i<this.nodeFeatureNum; i++) {
@@ -80,7 +99,7 @@ public class FactorTable {
         }
     }
 
-    public void setEdgeFeatureVarSet(Variable[] xEdge, Variable y, Variable yParent) {
+    public void setEdgeFeatureVarSet(Variable[] xEdge, Variable yParent, Variable y) {
 
         for(int i=0; i<this.edgeFeatureNum; i++) {
             this.edgeFeatureVarSet[i] = new HashVarSet(new Variable[]{
@@ -104,7 +123,7 @@ public class FactorTable {
             // System.out.println(thread.nodes.size());
             // extract all the featrue
             thread.extractNodeFeatures();
-            thread.extractNodeFeatures();
+            thread.extractEdgeFeatures();
 
             // after extract, get all the x-value in these features
             for(int i=0; i<nodeFeatureNum; i++) {
@@ -117,7 +136,6 @@ public class FactorTable {
 
                     // System.out.println(i);
                     // System.out.println(j);
-                    System.out.println("================");
                     int x = thread.nodeFeatures[i].x[j];
                     int label = thread.nodes.get(j).label;
                     this.nodeFeatureProb[i][x*3 + label] += 1;
@@ -129,15 +147,18 @@ public class FactorTable {
             for(int i=0; i<edgeFeatureNum; i++) {
                 for(int j=0; j<thread.nodes.size(); j++) {
                     if(j == 0) continue;
-                    int x = thread.edgeFeatures[i].x[j];
+                    int x = thread.edgeFeatures[i].x[j-1]; // the length of x is node.size()-1
                     Node curNode = thread.nodes.get(j);
                     Node parentNode = thread.nodes.get(curNode.parent);
                     int curLabel = curNode.label;
                     int parentLabel = parentNode.label;
-                    this.edgeFeatureProb[i][x*curLabel + parentLabel] += 1;
+                    this.edgeFeatureProb[i][x*2 + (parentLabel*3) + curLabel] += 1;
                     this.edgeFeatureCountAll[i] += 1;
                 }
             }
+
+            this.setNodeFeatureVarSet(nodeVariables, yVariable);
+            this.setEdgeFeatureVarSet(edgeVariables, yParentVariable, yVariable);
 
             // normalize and given result
             for(int i=0; i<nodeFeatureNum; i++) {
@@ -145,7 +166,8 @@ public class FactorTable {
                     this.nodeFeatureProb[i][j] /= this.nodeFeatureCountAll[i];
                 }
 
-                this.setNodeFeatureVarSet(nodeVariables, yVariable);
+
+
                 this.nodeFeatureFactor[i] = new TableFactor(nodeFeatureVarSet[i],
                         this.nodeFeatureProb[i]);
             }
@@ -154,7 +176,6 @@ public class FactorTable {
                     this.edgeFeatureProb[i][j] /= this.edgeFeatureCountAll[i];
                 }
 
-                this.setEdgeFeatureVarSet(edgeVariables, yVariable, yParentVariable);
                 this.edgeFeatureFactor[i] = new TableFactor(edgeFeatureVarSet[i],
                         this.edgeFeatureProb[i]);
             }
