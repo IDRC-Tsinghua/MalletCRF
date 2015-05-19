@@ -85,8 +85,9 @@ public class FactorTable {
         for(int i=0; i<this.edgeFeatureNum; i++) {
             this.edgeFeatureVarSet[i] = new HashVarSet(new Variable[]{
                     xEdge[i],
-                    y,
-                    yParent
+                    yParent,
+                    y
+
             });
         }
     }
@@ -96,9 +97,11 @@ public class FactorTable {
         for (Thread thread: threads) {
 
             // init the category of feature
-            thread.setNodeFeatures(Constant.nodeFeatureNames, Constant.sentimentDictLength);
+            thread.setNodeFeatures(Constant.nodeFeatureNames, nodeFeatureNum);
             thread.setEdgeFeatures(Constant.edgeFeatureNames);
 
+
+            // System.out.println(thread.nodes.size());
             // extract all the featrue
             thread.extractNodeFeatures();
             thread.extractNodeFeatures();
@@ -107,10 +110,14 @@ public class FactorTable {
             for(int i=0; i<nodeFeatureNum; i++) {
 
                 // foreach node on each nodefeature
-                for(int j=0; i<thread.nodes.size(); j++) {
+                for(int j=0; j<thread.nodes.size(); j++) {
 
                     // x is the similarity measure of node
                     // label is just the y
+
+                    // System.out.println(i);
+                    // System.out.println(j);
+                    System.out.println("================");
                     int x = thread.nodeFeatures[i].x[j];
                     int label = thread.nodes.get(j).label;
                     this.nodeFeatureProb[i][x*3 + label] += 1;
@@ -120,7 +127,8 @@ public class FactorTable {
 
             // foreach node on each edgefeature
             for(int i=0; i<edgeFeatureNum; i++) {
-                for(int j=1; j<thread.nodes.size(); j++) {
+                for(int j=0; j<thread.nodes.size(); j++) {
+                    if(j == 0) continue;
                     int x = thread.edgeFeatures[i].x[j];
                     Node curNode = thread.nodes.get(j);
                     Node parentNode = thread.nodes.get(curNode.parent);

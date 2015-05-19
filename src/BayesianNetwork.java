@@ -75,7 +75,7 @@ public class BayesianNetwork {
             }
 
             if(n == 0) continue;
-            ftItem.setEdgeFeatureVarSet(xEdge[n], y[n], y[n-1]);
+            ftItem.setEdgeFeatureVarSet(xEdge[n], y[n-1], y[n]);
             // add edge feature of factor
             for(int i=0; i<this.edgeFeatureNum; i++) {
                 // set the variables to the edgeFeatureVarSet
@@ -113,7 +113,8 @@ public class BayesianNetwork {
         // factor table init
         System.out.println("========Reading data========");
         DataReader dataReader = new DataReader();
-        Thread[] threads = dataReader.readData("../data/weibo.tsv"); // foobar
+        Thread[] threads = dataReader.readData("data/Interstellar"); // foobar
+
         DataSet dataset = new DataSet(threads);
         System.out.println(dataset.getThreadNum());
         //
