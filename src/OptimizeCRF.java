@@ -6,7 +6,11 @@ import cc.mallet.grmm.inference.TRP;
 import cc.mallet.grmm.types.*;
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizable.ByGradientValue;
+import cc.mallet.optimize.OptimizationException;
 import cc.mallet.optimize.Optimizer;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 
 public class OptimizeCRF implements ByGradientValue {
@@ -14,7 +18,10 @@ public class OptimizeCRF implements ByGradientValue {
   double[] params;
   Thread[] threads;
   double[] logZ;
+  double[] modelExpec;
   GraphBuilder graphBuilder = new GraphBuilder();
+  FactorGraph graph;
+  Inferencer inf = new TRP();
 
   public OptimizeCRF(double[] init_params, DataSet dataset) {
     params = new double[init_params.length];
@@ -88,9 +95,7 @@ public class OptimizeCRF implements ByGradientValue {
     double logLH = 0.0;
     int pt = 0;
     for (int i = 0; i < threads.length; i++) {
-      System.out.print(i + " ");
       logZ[i] = getLogPartitionValue(threads[i]);
-      System.out.print(logZ[i] + "\n");
     }
     for (Thread thread : threads) {
       int pf = 0;
@@ -118,8 +123,7 @@ public class OptimizeCRF implements ByGradientValue {
   }
 
   double[] getModelExpec(Thread thread, double[] params) {
-    System.out.println("start getModelExpec");
-    double[] modelExpec = new double[params.length];
+    modelExpec = new double[params.length];
     int nodeFeatureNum = thread.nodeFeatureNum;
     int edgeFeatureNum = thread.edgeFeatureNum;
     int nodeCount = thread.nodes.size();
@@ -142,13 +146,13 @@ public class OptimizeCRF implements ByGradientValue {
       tmp[v] = new Variable(3);
     VarSet y = new HashVarSet(tmp);
 
-    FactorGraph graph = graphBuilder.buildWithCRF(xNode, xEdge, y, thread, params);
-    Inferencer inf = new TRP();
+    graph = graphBuilder.buildWithCRF(xNode, xEdge, y, thread, params);
     inf.computeMarginals(graph);
+    Factor single;
     for (int i = 0; i < nodeFeatureNum; i++) {
       NodeFeature feature = thread.nodeFeatures[i];
       for (int n = 0; n < nodeCount; n++) {
-        Factor single = inf.lookupMarginal(y.get(n));
+        single = inf.lookupMarginal(y.get(n));
         int x = feature.x[n];
         for (int a = 0; a < 3; a++) {
           if (feature.potentials[n][x * 3 + a] > 0)
@@ -162,7 +166,9 @@ public class OptimizeCRF implements ByGradientValue {
       for (int e = 0; e < edgeCount; e++) {
         Variable[] varList = new Variable[3];
         varList[0] = xEdge[i].get(e);
-        varList[1] = y.get(thread.nodes.get(e + 1).parent);
+        if (feature.name == "FollowRoot")
+          varList[1] = y.get(0);
+        else varList[1] = y.get(thread.nodes.get(e + 1).parent);
         varList[2] = y.get(e + 1);
         Factor tripple = inf.lookupMarginal(new HashVarSet(varList));
         int x = feature.x[e];
@@ -173,7 +179,6 @@ public class OptimizeCRF implements ByGradientValue {
         }
       }
     }
-    System.out.println(modelExpec[0]);
     return modelExpec;
   }
 
@@ -199,10 +204,10 @@ public class OptimizeCRF implements ByGradientValue {
     System.out.println("finish getValueGradient");
   }
 
-  public static void main(String[] args) {
+  void trainCRF() {
     System.out.println("==========Reading Data==========");
     DataReader dataReader = new DataReader();
-    Thread[] threads = dataReader.readData("data/Interstellar");
+    Thread[] threads = dataReader.readData("data/weibo/fold_0");
     DataSet dataset = new DataSet(threads);
     System.out.println(dataset.getThreadNum());
 
@@ -215,17 +220,88 @@ public class OptimizeCRF implements ByGradientValue {
       init_params[p] = 1.0;
     OptimizeCRF crf = new OptimizeCRF(init_params, dataset);
     Optimizer opt = new LimitedMemoryBFGS(crf);
-		boolean converged = false;
-		try {
-			converged = opt.optimize();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		}
+    boolean converged = false;
+    try {
+      converged = opt.optimize();
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+    } catch (OptimizationException e) {
+      e.printStackTrace();
+    }
 
     System.out.println("==========Learning Finished==========");
-		System.out.println("converged: " + converged);
+    System.out.println("converged: " + converged);
     for (int p = 0; p < crf.getNumParameters(); p++)
-		  System.out.println(crf.getParameter(p));
+      System.out.println(crf.getParameter(p));
+  }
+
+  public static void main(String[] args) {
+    // trainCRF();
+    DataReader dataReader = new DataReader();
+    Thread[] threads = dataReader.readData("data/weibo/fold_1");
+    DataSet dataset = new DataSet(threads);
+    System.out.println(dataset.getThreadNum());
+    dataset.extractFeatures();
+    double[] params = new double[dataset.featureNum];
+    try {
+      BufferedReader br = new BufferedReader(new FileReader("data/params.txt"));
+      String line;
+      int p = 0;
+      while ((line = br.readLine()) != null) {
+        params[p] = Double.parseDouble(line.trim());
+        p++;
+      }
+      br.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    int correctNum = 0;
+    int totalNum = 0;
+    FactorGraph graph;
+    GraphBuilder builder = new GraphBuilder();
+    Inferencer inf = new TRP();
+    Factor single;
+    for (Thread thread : dataset.threads) {
+      int nodeFeatureNum = thread.nodeFeatureNum;
+      int edgeFeatureNum = thread.edgeFeatureNum;
+      int nodeCount = thread.nodes.size();
+      VarSet[] xNode = new HashVarSet[nodeFeatureNum];
+      for (int f = 0; f < nodeFeatureNum; f++) {
+        Variable[] tmp = new Variable[nodeCount];
+        for (int v = 0; v < nodeCount; v++)
+          tmp[v] = new Variable(thread.nodeFeatures[f].choiceNum);
+        xNode[f] = new HashVarSet(tmp);
+      }
+      VarSet[] xEdge = new HashVarSet[edgeFeatureNum];
+      for (int f = 0; f < edgeFeatureNum; f++) {
+        Variable[] tmp = new Variable[nodeCount - 1];
+        for (int v = 0; v < nodeCount - 1; v++)
+          tmp[v] = new Variable(thread.edgeFeatures[f].choiceNum);
+        xEdge[f] = new HashVarSet(tmp);
+      }
+      Variable[] tmp = new Variable[nodeCount];
+      for (int v = 0; v < nodeCount; v++)
+        tmp[v] = new Variable(3);
+      VarSet y = new HashVarSet(tmp);
+      graph = builder.buildWithCRF(xNode, xEdge, y, thread, params);
+      inf.computeMarginals(graph);
+      for (int v = 0; v < y.size(); v++) {
+        single = inf.lookupMarginal(y.get(v));
+        int infY = -1;
+        double maxPtl = -1;
+        for (AssignmentIterator it = single.assignmentIterator(); it.hasNext(); it.next()) {
+          if (single.value(it) > maxPtl) {
+            maxPtl = single.value(it);
+            infY = it.indexOfCurrentAssn();
+          }
+        }
+        if (infY == thread.nodes.get(v).label)
+          correctNum += 1;
+        totalNum += 1;
+      }
+      System.out.println(correctNum);
+    }
+    System.out.println((double) correctNum / (double) totalNum);
   }
 
 }
