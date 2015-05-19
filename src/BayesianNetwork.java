@@ -2,6 +2,7 @@ import Inference.FactorTable;
 import Microblog.*;
 import Microblog.Thread;
 import Utils.Constant;
+import Utils.Tuple;
 import cc.mallet.grmm.inference.Inferencer;
 import cc.mallet.grmm.inference.JunctionTreeInferencer;
 import cc.mallet.grmm.types.*;
@@ -70,11 +71,17 @@ public class BayesianNetwork {
 
 
                 // set node feature factor
+                /*
                 ftItem.nodeFeatureFactor[i] = new TableFactor(
                         ftItem.nodeFeatureVarSet[i],
                         ftItem.nodeFeatureProb[i]
                 );
                 this.nodeFactors[n][i] = ftItem.nodeFeatureFactor[i];
+                */
+                this.nodeFactors[n][i] = new TableFactor(
+                        ftItem.nodeFeatureVarSet[i],
+                        ftItem.nodeFeatureProb[i]
+                );
                 mdl.addFactor(this.nodeFactors[n][i]);
 
                 double[] singlePtl = new double[xNode[n][i].getNumOutcomes()];
@@ -88,11 +95,17 @@ public class BayesianNetwork {
             // add edge feature of factor
             for(int i=0; i<this.edgeFeatureNum; i++) {
                 // set the variables to the edgeFeatureVarSet
+                /*
                 ftItem.edgeFeatureFactor[i] = new TableFactor(
                         ftItem.edgeFeatureVarSet[i],
                         ftItem.edgeFeatureProb[i]
                 );
                 this.edgeFactors[n][i] = ftItem.edgeFeatureFactor[i];
+                */
+                this.edgeFactors[n][i] = new TableFactor(
+                        ftItem.edgeFeatureVarSet[i],
+                        ftItem.edgeFeatureProb[i]
+                );
                 mdl.addFactor(this.edgeFactors[n][i]);
 
                 double[] singlePtl = new double[xEdge[n][i].getNumOutcomes()];
@@ -102,27 +115,43 @@ public class BayesianNetwork {
             }
         }
     }
-    public void inference() {
+    public Tuple<Double, Double> inference() {
 
         Inferencer inf = new JunctionTreeInferencer();
         inf.computeMarginals(mdl);
         // int nodeFeatureNum = thread.nodeFeatureNum;
         // int edgeFeatureNum = thread.edgeFeatureNum;
         // int nodeSize = thread.nodes.size();
-        for (Variable var: y) {
+
+        Double correctCnt = 0.0;
+        Double Cnt = 0.0;
+
+        for (int i=0; i< y.length; i++) {
+            Variable var = y[i];
+            int label = thread.nodes.get(i).label;
+            int outcomeMax = 0;
+            double ptlMax = 0;
             Factor ptl = inf.lookupMarginal(var);
             for (AssignmentIterator it = ptl.assignmentIterator (); it.hasNext (); it.next()) {
                 int outcome = it.indexOfCurrentAssn ();
                 System.out.println (var+"  "+outcome+"   "+ptl.value (it));
-            }
+                if (ptl.value(it) > ptlMax) {
+                    outcomeMax = outcome;
+                    ptlMax = ptl.value(it);
+                }
+            } // get max outcome
+            if (label == outcomeMax)
+                correctCnt += 1;
+            Cnt += 1;
         }
+        return new Tuple<Double, Double>(correctCnt, Cnt);
     }
 
     public static void main(String[] args) {
         // factor table init
         System.out.println("========Reading data========");
         DataReader dataReader = new DataReader();
-        Thread[] threads = dataReader.readData("data/Interstellar"); // foobar
+        Thread[] threads = dataReader.readData("data/datav0.4"); // foobar
 
         DataSet dataset = new DataSet(threads);
         // System.out.println(dataset.getThreadNum());
@@ -135,8 +164,29 @@ public class BayesianNetwork {
 
         // factor graph
         // TODO: Test data: regard thread[0] as testdata
-        BayesianNetwork bn = new BayesianNetwork(factorTable,  threads[0]);
-        bn.inference();
+
+        Double correctCnt = 0.;
+        Double Cnt = 0.;
+        for (Thread thread: threads) {
+
+            // print y
+            for(int i = 0; i < thread.nodes.size(); i++) {
+
+                Node node = thread.nodes.get(i);
+                // System.out.println(node.label);
+            }
+
+            BayesianNetwork bn = new BayesianNetwork(factorTable,  thread);
+            Tuple<Double, Double> tuple = bn.inference();
+            correctCnt += tuple.x;
+            Cnt += tuple.y;
+
+            // System.out.println("===============");
+
+        }
+        double res = correctCnt / Cnt;
+        System.out.println(res);
+
     }
 
 
