@@ -151,7 +151,14 @@ public class BayesianNetwork {
         // factor table init
         System.out.println("========Reading data========");
         DataReader dataReader = new DataReader();
-        Thread[] threads = dataReader.readData("data/datav0.4"); // foobar
+        Thread[] threads1 = dataReader.readData("data/traindata/fold_0"); // foobar
+        Thread[] threads2 = dataReader.readData("data/traindata/fold_1"); // foobar
+        Thread[] threads3 = dataReader.readData("data/traindata/fold_2"); // foobar
+        Thread[] threads4 = dataReader.readData("data/traindata/fold_3"); // foobar
+        // NAIVE!!!
+        Thread[] threads = Constant.concatentate(threads1, threads2);
+        threads = Constant.concatentate(threads, threads3);
+        threads = Constant.concatentate(threads, threads4);
 
         DataSet dataset = new DataSet(threads);
         // System.out.println(dataset.getThreadNum());
