@@ -52,17 +52,33 @@ public class BayesianNetwork {
         xEdge = new Variable[nodeCnt][edgeFeatureNum];
         y = new Variable[nodeCnt];
 
+
+        // init
+        // xNode init
+        for(int n=0; n<nodeCnt; n++)
+            for(int i=0; i<nodeFeatureNum; i++)
+                xNode[n][i] = new Variable(3);
+
+        for(int n=0; n<nodeCnt; n++)
+            for(int i=0; i<edgeFeatureNum; i++)
+                xEdge[n][i] = new Variable(2);
+
+        for(int n=0; n<nodeCnt; n++)
+            y[n] = new Variable(3);
+
         for(int n=0; n<nodeCnt; n++) {
 
             // generate each factor to each node
             FactorTable ftItem = factorTable.clone();
+
+            /*
             // set node and edge varset with local variables
             for (int i=0; i < nodeFeatureNum; i++)
                 xNode[n][i] = new Variable(3);
             for (int i=0; i < edgeFeatureNum; i++)
                 xEdge[n][i] = new Variable(2);
             y[n] = new Variable(3);
-
+            */
 
             ftItem.setNodeFeatureVarSet(xNode[n], y[n]);
             // add node feature of factor
@@ -134,7 +150,7 @@ public class BayesianNetwork {
             Factor ptl = inf.lookupMarginal(var);
             for (AssignmentIterator it = ptl.assignmentIterator (); it.hasNext (); it.next()) {
                 int outcome = it.indexOfCurrentAssn ();
-                System.out.println (var+"  "+outcome+"   "+ptl.value (it));
+                // System.out.println (var+"  "+outcome+"   "+ptl.value (it));
                 if (ptl.value(it) > ptlMax) {
                     outcomeMax = outcome;
                     ptlMax = ptl.value(it);
@@ -174,8 +190,14 @@ public class BayesianNetwork {
 
         Double correctCnt = 0.;
         Double Cnt = 0.;
+
+        double taskCnt = 0;
+        double threadCnt = threads.length;
+        double intervel = threadCnt / 100.0;
+        System.out.println(intervel);
         for (Thread thread: threads) {
 
+            taskCnt += 1;
             // print y
             for(int i = 0; i < thread.nodes.size(); i++) {
 
@@ -188,6 +210,11 @@ public class BayesianNetwork {
             correctCnt += tuple.x;
             Cnt += tuple.y;
 
+            // System.out.println(taskCnt);
+            // System.out.println(taskCnt);
+            if (taskCnt % 13 == 0) {
+                System.out.println(taskCnt/threadCnt * 100 + "%");
+            }
             // System.out.println("===============");
 
         }

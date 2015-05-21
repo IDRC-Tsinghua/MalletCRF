@@ -44,8 +44,8 @@ public class FactorTable {
             this.nodeVariables[i] = new Variable(3);
         for(int i=0; i<edgeVariables.length; i++)
             this.edgeVariables[i] = new Variable(2);
-        this.yVariable = new Variable(3);
         this.yParentVariable = new Variable(3);
+        this.yVariable = new Variable(3);
 
     }
 
@@ -160,30 +160,29 @@ public class FactorTable {
                 for (int j=0; j<this.nodeFeatureProb[i].length; j++) {
                     this.nodeFeatureProb[i][j] = nodeFeatureCnt[i][j] / nodeFeatureCountAll[i];
                 }
-
-
-
                 //this.nodeFeatureFactor[i] = new TableFactor(nodeFeatureVarSet[i], this.nodeFeatureProb[i]);
             }
-            for(int i=0; i<edgeFeatureNum; i++) {
-                for (int j = 0; j < this.edgeFeatureProb[i].length; j++) {
-                    this.edgeFeatureProb[i][j] = edgeFeatureCnt[i][j] / edgeFeatureCountAll[i];
-                }
 
-                // this.edgeFeatureFactor[i] = new TableFactor(edgeFeatureVarSet[i], this.edgeFeatureProb[i]);
+        }
+
+        for(int i=0; i<edgeFeatureNum; i++) {
+            for (int j = 0; j < this.edgeFeatureProb[i].length; j++) {
+                this.edgeFeatureProb[i][j] = edgeFeatureCnt[i][j] / edgeFeatureCountAll[i];
             }
 
-            // check the probability
-            for (int i=0; i<nodeFeatureNum; i++)
-                for (int j=0; j<this.nodeFeatureProb.length; j++)
-                    if (this.nodeFeatureProb[i][j] == 0)
-                        this.nodeFeatureProb[i][j] = Constant.minPtl;
-
-            for (int i=0; i<edgeFeatureNum; i++)
-                for (int j=0; j<this.edgeFeatureProb.length; j++)
-                    if (this.edgeFeatureProb[i][j] == 0)
-                        this.edgeFeatureProb[i][j] = Constant.minPtl;
+            // this.edgeFeatureFactor[i] = new TableFactor(edgeFeatureVarSet[i], this.edgeFeatureProb[i]);
         }
+
+        // check the probability
+        for (int i=0; i<nodeFeatureNum; i++)
+            for (int j=0; j<3*3; j++)
+                if (this.nodeFeatureProb[i][j] == 0)
+                    this.nodeFeatureProb[i][j] = Constant.minPtl;
+
+        for (int i=0; i<edgeFeatureNum; i++)
+            for (int j=0; j<2*3*3; j++)
+                if (this.edgeFeatureProb[i][j] == 0)
+                    this.edgeFeatureProb[i][j] = Constant.minPtl;
 
     }
 }
