@@ -8,6 +8,9 @@ import java.util.Arrays;
 public class Thread {
 	public long id;
 	public ArrayList<Node> nodes = null;
+	public ArrayList<Integer> positiveWords = null;
+	public ArrayList<Integer> neutralWords = null;
+	public ArrayList<Integer> negativeWords = null;
 	public NodeFeature[] nodeFeatures = null;
 	String[] nodeFeatureNames = null;
 	public int nodeFeatureNum;
@@ -22,9 +25,24 @@ public class Thread {
 		this.nodeCount = this.nodes.size();
 	}
 
-	public void setNodeFeatures(String[] featureNames, int nodeFeatureNum) {
+	public void setNodeFeatures(String[] featureNames) {
 		this.nodeFeatureNames = featureNames;
-		this.nodeFeatures = new NodeFeature[nodeFeatureNum];
+		this.nodeFeatures = new NodeFeature[featureNames.length];
+		try {
+			for (int i = 0; i < featureNames.length; i++) {
+				NodeFeature featureObj = (NodeFeature) Class.forName(
+						"Microblog." + featureNames[i]).newInstance();
+				this.nodeFeatures[i] = featureObj;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.nodeFeatureNum = this.nodeFeatures.length;
+	}
+
+	public void setNodeFeatures(String[] featureNames, int dictLength) {
+		this.nodeFeatureNames = featureNames;
+		this.nodeFeatures = new NodeFeature[featureNames.length + dictLength];
 		try {
 			for (int i = 0; i < featureNames.length; i++) {
 				NodeFeature featureObj = (NodeFeature) Class.forName(
@@ -80,8 +98,22 @@ public class Thread {
 	}
 
 	public void extractNodeFeatures() {
-		for (NodeFeature nodeFeature : this.nodeFeatures)
-			nodeFeature.extract(this.nodes);
+		for (NodeFeature nodeFeature : this.nodeFeatures) {
+			switch (nodeFeature.name) {
+				case ("PositiveWord"):
+					nodeFeature.extract(this.nodes, this.positiveWords);
+					break;
+				case ("NeutralWord"):
+					nodeFeature.extract(this.nodes, this.neutralWords);
+					break;
+				case ("NegativeWord"):
+					nodeFeature.extract(this.nodes, this.negativeWords);
+					break;
+				default:
+					nodeFeature.extract(this.nodes);
+					break;
+			}
+		}
 	}
 
 	public void extractEdgeFeatures() {
@@ -106,9 +138,8 @@ public class Thread {
 
 	public void showFeatureValues() {
 		if (this.nodeFeatures != null && this.edgeFeatures != null) {
-			//for (NodeFeature nodefeature : this.nodeFeatures)
-			System.out.println(this.nodeFeatures[0].name + ": " + Arrays.toString(this.nodeFeatures[0].x));
-			System.out.println(this.nodeFeatures[1].name + ": " + Arrays.toString(this.nodeFeatures[1].x));
+			for (NodeFeature nodefeature : this.nodeFeatures)
+				System.out.println(nodefeature.name + ": " + Arrays.toString(nodefeature.x));
 			for (EdgeFeature edgefeature : this.edgeFeatures)
 				System.out.println(edgefeature.name + ": " + Arrays.toString(edgefeature.x));
 		} else {

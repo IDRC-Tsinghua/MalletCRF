@@ -1,22 +1,55 @@
 package Microblog;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+
 public class DataSet {
   public Thread[] threads;
   public int featureNum;
-  int nodeFeatureNum;
-  int edgeFeatureNum;
-  public String[] nodeFeatureNames = new String[]{"NodeEmoji"};
+  public int nodeFeatureNum;
+  public int edgeFeatureNum;
+  public String[] nodeFeatureNames = new String[]{"NodeEmoji", "PositiveWord", "NeutralWord", "NegativeWord"};
   public String[] edgeFeatureNames = new String[]{"SameAuthor", "Similarity", "Difference",
       "SentimentProp", "AuthorRef", "HashTag", "SameEmoji", "FollowRoot"};
   public int posDictLength = 345;
   public int neuDictLength = 335;
   public int negDictLength = 328;
+  ArrayList<Integer> positiveWords = new ArrayList<>();
+  ArrayList<Integer> neutralWords = new ArrayList<>();
+  ArrayList<Integer> negativeWords = new ArrayList<>();
 
   public DataSet(Thread[] threads) {
-    this.featureNum = nodeFeatureNames.length + edgeFeatureNames.length + posDictLength + neuDictLength + negDictLength;
-    this.nodeFeatureNum = nodeFeatureNames.length + posDictLength + neuDictLength + negDictLength;
+    this.featureNum = nodeFeatureNames.length + edgeFeatureNames.length;
+    this.nodeFeatureNum = nodeFeatureNames.length;
+    //this.featureNum = nodeFeatureNames.length + edgeFeatureNames.length + posDictLength + neuDictLength + negDictLength;
+    //this.nodeFeatureNum = nodeFeatureNames.length + posDictLength + neuDictLength + negDictLength;
     this.edgeFeatureNum = edgeFeatureNames.length;
     this.threads = threads;
+    try {
+      BufferedReader br = new BufferedReader(new FileReader("data/positive.txt"));
+      String line;
+      while ((line = br.readLine()) != null) {
+        String[] pair = line.split("\t");
+        this.positiveWords.add(Integer.parseInt(pair[0]));
+      }
+      br.close();
+      br = new BufferedReader(new FileReader("data/neutral.txt"));
+      while ((line = br.readLine()) != null) {
+        String[] pair = line.split("\t");
+        this.neutralWords.add(Integer.parseInt(pair[0]));
+        ;
+      }
+      br.close();
+      br = new BufferedReader(new FileReader("data/negative.txt"));
+      while ((line = br.readLine()) != null) {
+        String[] pair = line.split("\t");
+        this.negativeWords.add(Integer.parseInt(pair[0]));
+      }
+      br.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public int getThreadNum() {
@@ -25,7 +58,10 @@ public class DataSet {
 
   public void extractFeatures() {
     for (Thread thread : this.threads) {
-      thread.setNodeFeatures(this.nodeFeatureNames, this.nodeFeatureNum);
+      thread.positiveWords = this.positiveWords;
+      thread.neutralWords = this.neutralWords;
+      thread.negativeWords = this.negativeWords;
+      thread.setNodeFeatures(this.nodeFeatureNames);
       thread.setEdgeFeatures(this.edgeFeatureNames);
       thread.extractFeatures();
       thread.showFeatureValues();

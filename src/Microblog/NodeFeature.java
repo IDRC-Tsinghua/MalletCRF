@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 abstract public class NodeFeature extends Feature {
 	String name = "NodeFeature";
+
+  abstract void extract(ArrayList<Node> nodes, ArrayList<Integer> words);
 }
 
 class NodeEmoji extends NodeFeature {
@@ -32,7 +34,7 @@ class NodeEmoji extends NodeFeature {
       else
         emojiLabel = 1;
       this.x[n] = emojiLabel;
-      if (emojiLabel == node.label)
+      if (emojiLabel == node.label | emojiLabel == 1)
         this.values[n] = 1.0;
       else
         this.values[n] = 0.0;
@@ -43,8 +45,14 @@ class NodeEmoji extends NodeFeature {
       for (int p = 0; p < this.choiceNum * 3; p++)
         this.potentials[n][p] = Constant.minPtl;
       this.potentials[n][0] = 1.0;
+      this.potentials[n][3] = 1.0;
       this.potentials[n][4] = 1.0;
+      this.potentials[n][5] = 1.0;
       this.potentials[n][8] = 1.0;
     }
+  }
+
+  public void extract(ArrayList<Node> nodes, ArrayList<Integer> words) {
+    this.extract(nodes);
   }
 }

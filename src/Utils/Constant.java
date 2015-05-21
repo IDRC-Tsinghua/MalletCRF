@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class Constant {
 
-    public static String[] nodeFeatureNames = new String[]{"NodeEmoji"};
+    public static String[] nodeFeatureNames = new String[]{"NodeEmoji", "PositiveWord", "NeutralWord", "NegativeWord"};
     public static String[] edgeFeatureNames = new String[]{"SameAuthor", "Similarity", "Difference",
             "SentimentProp", "AuthorRef", "HashTag", "SameEmoji", "FollowRoot"};
     public static int posDictLength = 345;

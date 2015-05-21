@@ -52,7 +52,7 @@ public class FactorTable {
         for (Thread thread: threads) {
 
             // init the category of feature
-            thread.setNodeFeatures(Constant.nodeFeatureNames, Constant.sentimentDictLength);
+            thread.setNodeFeatures(Constant.nodeFeatureNames);
             thread.setEdgeFeatures(Constant.edgeFeatureNames);
 
             // extract all the featrue

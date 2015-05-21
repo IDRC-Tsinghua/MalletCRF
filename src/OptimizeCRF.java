@@ -11,6 +11,7 @@ import cc.mallet.optimize.Optimizer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.HashMap;
 
 
 public class OptimizeCRF implements ByGradientValue {
@@ -204,10 +205,20 @@ public class OptimizeCRF implements ByGradientValue {
     System.out.println("finish getValueGradient");
   }
 
-  void trainCRF() {
+  static void trainCRF(int fold) {
     System.out.println("==========Reading Data==========");
     DataReader dataReader = new DataReader();
-    Thread[] threads = dataReader.readData("data/weibo/fold_0");
+    int[] folds = new int[4];
+    int pf = 0;
+    for (int f = 0; f < 5; f++) {
+      if (f != fold) {
+        folds[pf] = f;
+        pf++;
+      }
+    }
+    String[] trainFolds = {"data/weibo/fold_" + folds[0], "data/weibo/fold_" + folds[1],
+        "data/weibo/fold_" + folds[2], "data/weibo/fold_" + folds[3]};
+    Thread[] threads = dataReader.readData(trainFolds);
     DataSet dataset = new DataSet(threads);
     System.out.println(dataset.getThreadNum());
 
@@ -235,10 +246,9 @@ public class OptimizeCRF implements ByGradientValue {
       System.out.println(crf.getParameter(p));
   }
 
-  public static void main(String[] args) {
-    // trainCRF();
+  static void testCRF(int fold) {
     DataReader dataReader = new DataReader();
-    Thread[] threads = dataReader.readData("data/weibo/fold_1");
+    Thread[] threads = dataReader.readData(new String[]{"data/weibo/fold_" + fold});
     DataSet dataset = new DataSet(threads);
     System.out.println(dataset.getThreadNum());
     dataset.extractFeatures();
@@ -261,18 +271,25 @@ public class OptimizeCRF implements ByGradientValue {
     GraphBuilder builder = new GraphBuilder();
     Inferencer inf = new TRP();
     Factor single;
+    VarSet[] xNode = new HashVarSet[dataset.nodeFeatureNum];
+    VarSet[] xEdge = new HashVarSet[dataset.edgeFeatureNum];
+    VarSet y = null;
+    HashMap<Integer, Integer[]> precision = new HashMap<>();
+    for (int l = 0; l < 3; l++)
+      precision.put(l, new Integer[]{0, 0});
+    HashMap<Integer, Integer[]> recall = new HashMap<>();
+    for (int l = 0; l < 3; l++)
+      recall.put(l, new Integer[]{0, 0});
     for (Thread thread : dataset.threads) {
       int nodeFeatureNum = thread.nodeFeatureNum;
       int edgeFeatureNum = thread.edgeFeatureNum;
       int nodeCount = thread.nodes.size();
-      VarSet[] xNode = new HashVarSet[nodeFeatureNum];
       for (int f = 0; f < nodeFeatureNum; f++) {
         Variable[] tmp = new Variable[nodeCount];
         for (int v = 0; v < nodeCount; v++)
           tmp[v] = new Variable(thread.nodeFeatures[f].choiceNum);
         xNode[f] = new HashVarSet(tmp);
       }
-      VarSet[] xEdge = new HashVarSet[edgeFeatureNum];
       for (int f = 0; f < edgeFeatureNum; f++) {
         Variable[] tmp = new Variable[nodeCount - 1];
         for (int v = 0; v < nodeCount - 1; v++)
@@ -282,9 +299,10 @@ public class OptimizeCRF implements ByGradientValue {
       Variable[] tmp = new Variable[nodeCount];
       for (int v = 0; v < nodeCount; v++)
         tmp[v] = new Variable(3);
-      VarSet y = new HashVarSet(tmp);
+      y = new HashVarSet(tmp);
       graph = builder.buildWithCRF(xNode, xEdge, y, thread, params);
       inf.computeMarginals(graph);
+      int[] realY = thread.getLabels();
       for (int v = 0; v < y.size(); v++) {
         single = inf.lookupMarginal(y.get(v));
         int infY = -1;
@@ -295,13 +313,32 @@ public class OptimizeCRF implements ByGradientValue {
             infY = it.indexOfCurrentAssn();
           }
         }
-        if (infY == thread.nodes.get(v).label)
+        if (infY == realY[v]) {
           correctNum += 1;
+          precision.get(infY)[0] += 1;
+          recall.get(realY[v])[0] += 1;
+        }
         totalNum += 1;
+        precision.get(infY)[1] += 1;
+        recall.get(realY[v])[1] += 1;
       }
       System.out.println(correctNum);
     }
-    System.out.println((double) correctNum / (double) totalNum);
+    System.out.println("correct: " + correctNum);
+    System.out.println("total" + totalNum);
+    System.out.println("accuracy: " + (double) correctNum / (double) totalNum);
+    System.out.println("precision:" +
+        " 0 " + precision.get(0)[0] + "/" + precision.get(0)[1] +
+        " 1 " + precision.get(1)[0] + "/" + precision.get(1)[1] +
+        " 2 " + precision.get(2)[0] + "/" + precision.get(2)[1]);
+    System.out.println("recall: " +
+        " 0 " + recall.get(0)[0] + "/" + recall.get(0)[1] +
+        " 1 " + recall.get(1)[0] + "/" + recall.get(1)[1] +
+        " 2 " + recall.get(2)[0] + "/" + recall.get(2)[1]);
+  }
+
+  public static void main(String[] args) {
+    trainCRF(0);
   }
 
 }
