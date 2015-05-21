@@ -11,15 +11,16 @@ import java.util.ArrayList;
  * Created by wyc on 2015/5/6.
  */
 public class DataReader {
-  public Thread[] readData(String[] paths) {
+  public Thread[] readData(String[] paths, int limit) {
     ArrayList<Thread> dataset = new ArrayList<>();
     for (String path : paths) {
+      System.out.println(path);
       File dataPath = new File(path);
       File[] datafiles = dataPath.listFiles();
       ArrayList<Node> nodes = null;
       long preThreadID = 0;
       for (File file : datafiles) {
-        //System.out.println(file);
+        System.out.println(file);
         try {
           BufferedReader br = new BufferedReader(new FileReader(file));
           String line;
@@ -32,8 +33,8 @@ public class DataReader {
               }
               nodes = new ArrayList<>();
             }
-            //if (nodes.size() < 6)
-            nodes.add(new Node(obj));
+            if (nodes.size() < limit)
+              nodes.add(new Node(obj));
             preThreadID = curThreadID;
           }
           br.close();

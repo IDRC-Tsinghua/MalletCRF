@@ -64,7 +64,7 @@ public class DataSet {
       thread.setNodeFeatures(this.nodeFeatureNames);
       thread.setEdgeFeatures(this.edgeFeatureNames);
       thread.extractFeatures();
-      thread.showFeatureValues();
+      //thread.showFeatureValues();
     }
   }
 }

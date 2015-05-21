@@ -218,7 +218,7 @@ public class OptimizeCRF implements ByGradientValue {
     }
     String[] trainFolds = {"data/weibo/fold_" + folds[0], "data/weibo/fold_" + folds[1],
         "data/weibo/fold_" + folds[2], "data/weibo/fold_" + folds[3]};
-    Thread[] threads = dataReader.readData(trainFolds);
+    Thread[] threads = dataReader.readData(trainFolds, 6);
     DataSet dataset = new DataSet(threads);
     System.out.println(dataset.getThreadNum());
 
@@ -248,7 +248,7 @@ public class OptimizeCRF implements ByGradientValue {
 
   static void testCRF(int fold) {
     DataReader dataReader = new DataReader();
-    Thread[] threads = dataReader.readData(new String[]{"data/weibo/fold_" + fold});
+    Thread[] threads = dataReader.readData(new String[]{"data/weibo/fold_" + fold}, 30);
     DataSet dataset = new DataSet(threads);
     System.out.println(dataset.getThreadNum());
     dataset.extractFeatures();
@@ -325,7 +325,7 @@ public class OptimizeCRF implements ByGradientValue {
       System.out.println(correctNum);
     }
     System.out.println("correct: " + correctNum);
-    System.out.println("total" + totalNum);
+    System.out.println("total: " + totalNum);
     System.out.println("accuracy: " + (double) correctNum / (double) totalNum);
     System.out.println("precision:" +
         " 0 " + precision.get(0)[0] + "/" + precision.get(0)[1] +
@@ -338,7 +338,8 @@ public class OptimizeCRF implements ByGradientValue {
   }
 
   public static void main(String[] args) {
-    trainCRF(0);
+    trainCRF(2);
+    //testCRF(1);
   }
 
 }
