@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class WordFeature extends NodeFeature {
   public int index;
   public int polarity; //0, 1, 2
+  public double[] potentials;
 
   public WordFeature(int index, int polarity) {
     this.index = index;
@@ -43,23 +44,21 @@ public class WordFeature extends NodeFeature {
       }
     }
     // compute potentials
-    this.potentials = new double[nodes.size()][this.choiceNum*3];
-    for (int n = 0; n < nodes.size(); n++) {
-      for (int p = 0; p < this.choiceNum * 3; p++)
-        this.potentials[n][p] = Constant.minPtl;
-      switch (this.polarity) {
-        case 0:
-          this.potentials[n][3] = 1.0;
-          break;
-        case 1:
-          this.potentials[n][4] = 1.0;
-          break;
-        case 2:
-          this.potentials[n][5] = 1.0;
-          break;
-        default: // should never be reached
-          break;
-      }
+    this.potentials = new double[this.choiceNum * 3];
+    for (int p = 0; p < this.choiceNum * 3; p++)
+      this.potentials[p] = Constant.minPtl;
+    switch (this.polarity) {
+      case 0:
+        this.potentials[3] = 1.0;
+        break;
+      case 1:
+        this.potentials[4] = 1.0;
+        break;
+      case 2:
+        this.potentials[5] = 1.0;
+        break;
+      default: // should never be reached
+        break;
     }
   }
 
@@ -100,14 +99,6 @@ abstract class SentimentWord extends NodeFeature {
       if (this.x[n] > 0 && node.label == this.polarity)
         this.values[n] = (double) this.x[n];
     }
-    // compute potentials
-    this.potentials = new double[nodes.size()][this.choiceNum * 3];
-    for (int n = 0; n < nodes.size(); n++) {
-      for (int p = 0; p < this.choiceNum * 3; p++)
-        this.potentials[n][p] = Constant.minPtl;
-      for (int c = 0; c < this.choiceNum; c++)
-        this.potentials[n][c * 3 + this.polarity] = Math.max((double) c, Constant.minPtl);
-    }
   }
 }
 
@@ -117,6 +108,7 @@ class PositiveWord extends SentimentWord {
     this.name = "PositiveWord";
     this.choiceNum = 10;
     this.polarity = 2;
+    this.potentials = Constant.PositiveWordPtl;
   }
 
 }
@@ -127,6 +119,7 @@ class NeutralWord extends SentimentWord {
     this.name = "NeutralWord";
     this.choiceNum = 10;
     this.polarity = 1;
+    this.potentials = Constant.NeutralWordPtl;
   }
 
 }
@@ -137,6 +130,7 @@ class NegativeWord extends SentimentWord {
     this.name = "NegativeWord";
     this.choiceNum = 10;
     this.polarity = 0;
+    this.potentials = Constant.NegativeWordPtl;
   }
 
 }

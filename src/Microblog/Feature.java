@@ -11,11 +11,13 @@ abstract public class Feature {
 	double diffThreshold = 0.0;
 	public int[] x;
 	public double[] values;
-	public double[][] potentials;
+	public double[] potentials;
 
 	abstract public void extract(ArrayList<Node> nodes);
 
 	double cosineSim(HashMap<Integer, Integer> A, HashMap<Integer, Integer> B) {
+		if (A.size() == 0 && B.size() == 0)
+			return 1.0;
 		double sum_AB = 0.0;
 		double sum_A2 = 0.0;
 		double sum_B2 = 0.0;

@@ -32,4 +32,61 @@ public class Constant {
         featureFactorMap.put("FollowRoot", "FollowRootFactor");
         // TODO: Add more featureName~featureFactor Map
     }
+
+    public static double[] NodeEmojiPtl = new double[]{
+        1.0, Constant.minPtl, Constant.minPtl,
+        1.0, 1.0, 1.0,
+        Constant.minPtl, Constant.minPtl, 1.0
+    };
+
+    public static double[] PositiveWordPtl = new double[]{
+        Constant.minPtl, Constant.minPtl, Constant.minPtl,
+        Constant.minPtl, Constant.minPtl, 1.0,
+        Constant.minPtl, Constant.minPtl, 2.0,
+        Constant.minPtl, Constant.minPtl, 3.0,
+        Constant.minPtl, Constant.minPtl, 4.0,
+        Constant.minPtl, Constant.minPtl, 5.0,
+        Constant.minPtl, Constant.minPtl, 6.0,
+        Constant.minPtl, Constant.minPtl, 7.0,
+        Constant.minPtl, Constant.minPtl, 8.0,
+        Constant.minPtl, Constant.minPtl, 9.0
+    };
+
+    public static double[] NeutralWordPtl = new double[]{
+        Constant.minPtl, Constant.minPtl, Constant.minPtl,
+        Constant.minPtl, 1.0, Constant.minPtl,
+        Constant.minPtl, 2.0, Constant.minPtl,
+        Constant.minPtl, 3.0, Constant.minPtl,
+        Constant.minPtl, 4.0, Constant.minPtl,
+        Constant.minPtl, 5.0, Constant.minPtl,
+        Constant.minPtl, 6.0, Constant.minPtl,
+        Constant.minPtl, 7.0, Constant.minPtl,
+        Constant.minPtl, 8.0, Constant.minPtl,
+        Constant.minPtl, 9.0, Constant.minPtl
+    };
+
+    public static double[] NegativeWordPtl = new double[]{
+        Constant.minPtl, Constant.minPtl, Constant.minPtl,
+        1.0, Constant.minPtl, Constant.minPtl,
+        2.0, Constant.minPtl, Constant.minPtl,
+        3.0, Constant.minPtl, Constant.minPtl,
+        4.0, Constant.minPtl, Constant.minPtl,
+        5.0, Constant.minPtl, Constant.minPtl,
+        6.0, Constant.minPtl, Constant.minPtl,
+        7.0, Constant.minPtl, Constant.minPtl,
+        8.0, Constant.minPtl, Constant.minPtl,
+        9.0, Constant.minPtl, Constant.minPtl,
+    };
+
+    public static double[] SamePtl = new double[]{
+        Constant.minPtl, Constant.minPtl, Constant.minPtl, Constant.minPtl, Constant.minPtl, Constant.minPtl,
+        Constant.minPtl, Constant.minPtl, Constant.minPtl, 1.0, Constant.minPtl, Constant.minPtl,
+        Constant.minPtl, 1.0, Constant.minPtl, Constant.minPtl, Constant.minPtl, 1.0
+    };
+
+    public static double[] DiffPtl = new double[]{
+        Constant.minPtl, Constant.minPtl, Constant.minPtl, Constant.minPtl, Constant.minPtl, Constant.minPtl,
+        Constant.minPtl, Constant.minPtl, Constant.minPtl, Constant.minPtl, 1.0, 1.0,
+        1.0, Constant.minPtl, 1.0, 1.0, 1.0, Constant.minPtl
+    };
 }

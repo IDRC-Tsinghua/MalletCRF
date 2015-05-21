@@ -14,6 +14,7 @@ class SameAuthor extends EdgeFeature {
 
   public SameAuthor() {
     this.name =  "SameAuthor";
+    this.potentials = Constant.SamePtl;
   }
 
 	public void extract(ArrayList<Node> nodes) {
@@ -30,15 +31,6 @@ class SameAuthor extends EdgeFeature {
 				this.values[n-1] = 1.0;
 			else this.values[n-1] = 0.0;
 		}
-		// compute potentials
-		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
-		for (int n = 1; n < nodes.size(); n++) {
-			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
-				this.potentials[n - 1][p] = Constant.minPtl;
-			this.potentials[n-1][9] = 1.0;
-			this.potentials[n-1][13] = 1.0;
-			this.potentials[n-1][17] = 1.0;
-		}
 	}
 }
 
@@ -46,6 +38,7 @@ class Similarity extends EdgeFeature {
 
   public Similarity() {
     this.name = "Similarity";
+    this.potentials = Constant.SamePtl;
   }
 
 	public void extract(ArrayList<Node> nodes) {
@@ -63,15 +56,6 @@ class Similarity extends EdgeFeature {
 				this.values[n-1] = 1.0;
 			else this.values[n-1] = 0.0;
 		}
-		// compute potentials
-		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
-		for (int n = 1; n < nodes.size(); n++) {
-			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
-				this.potentials[n - 1][p] = Constant.minPtl;
-			this.potentials[n-1][9] = 1.0;
-			this.potentials[n-1][13] = 1.0;
-			this.potentials[n-1][17] = 1.0;
-		}
 	}
 }
 
@@ -79,6 +63,7 @@ class Difference extends EdgeFeature {
 
   public Difference() {
     this.name = "Difference";
+    this.potentials = Constant.DiffPtl;
   }
 
 	public void extract(ArrayList<Node> nodes) {
@@ -96,18 +81,6 @@ class Difference extends EdgeFeature {
 				this.values[n-1] = 1.0;
 			else this.values[n-1] = 0.0;
 		}
-		// compute potentials
-		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
-		for (int n = 1; n < nodes.size(); n++) {
-			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
-				this.potentials[n - 1][p] = Constant.minPtl;
-			this.potentials[n-1][10] = 1.0;
-			this.potentials[n-1][11] = 1.0;
-			this.potentials[n-1][12] = 1.0;
-			this.potentials[n-1][14] = 1.0;
-			this.potentials[n-1][15] = 1.0;
-			this.potentials[n-1][16] = 1.0;
-		}
 	}
 }
 
@@ -115,6 +88,7 @@ class SentimentProp extends EdgeFeature {
 
   public SentimentProp() {
     this.name = "SentimentProp";
+    this.potentials = Constant.SamePtl;
   }
 
 	public void extract(ArrayList<Node> nodes) {
@@ -129,15 +103,6 @@ class SentimentProp extends EdgeFeature {
 				this.values[n-1] = 1.0;
 			else this.values[n-1] = 0.0;
 		}
-		// compute potentials
-		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
-		for (int n = 1; n < nodes.size(); n++) {
-			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
-				this.potentials[n - 1][p] = Constant.minPtl;
-			this.potentials[n-1][9] = 1.0;
-			this.potentials[n-1][13] = 1.0;
-			this.potentials[n-1][17] = 1.0;
-		}
 	}
 }
 
@@ -145,6 +110,7 @@ class AuthorRef extends EdgeFeature {
 
   public AuthorRef() {
     this.name = "AuthorRef";
+    this.potentials = Constant.SamePtl;
   }
 
 	public void extract(ArrayList<Node> nodes) {
@@ -161,15 +127,6 @@ class AuthorRef extends EdgeFeature {
 				this.values[n-1] = 1.0;
 			else this.values[n-1] = 0.0;
 		}
-		// compute potentials
-		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
-		for (int n = 1; n < nodes.size(); n++) {
-			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
-				this.potentials[n - 1][p] = Constant.minPtl;
-			this.potentials[n-1][9] = 1.0;
-			this.potentials[n-1][13] = 1.0;
-			this.potentials[n-1][17] = 1.0;
-		}
 	}
 }
 
@@ -177,6 +134,7 @@ class HashTag extends EdgeFeature {
 
   public HashTag() {
     this.name = "HashTag";
+    this.potentials = Constant.SamePtl;
   }
 
 	public void extract(ArrayList<Node> nodes) {
@@ -196,15 +154,6 @@ class HashTag extends EdgeFeature {
 				this.values[n-1] = 1.0;
 			else this.values[n-1] = 0.0;
 		}
-		// compute potentials
-		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
-		for (int n = 1; n < nodes.size(); n++) {
-			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
-				this.potentials[n - 1][p] = Constant.minPtl;
-			this.potentials[n-1][9] = 1.0;
-			this.potentials[n-1][13] = 1.0;
-			this.potentials[n-1][17] = 1.0;
-		}
 	}
 }
 
@@ -212,6 +161,7 @@ class SameEmoji extends EdgeFeature {
 
   public SameEmoji() {
     this.name = "SameEmoji";
+    this.potentials = Constant.SamePtl;
   }
 
 	public void extract(ArrayList<Node> nodes) {
@@ -231,15 +181,6 @@ class SameEmoji extends EdgeFeature {
 				this.values[n-1] = 1.0;
 			else this.values[n-1] = 0.0;
 		}
-		// compute potentials
-		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
-		for (int n = 1; n < nodes.size(); n++) {
-			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
-				this.potentials[n - 1][p] = Constant.minPtl;
-			this.potentials[n-1][9] = 1.0;
-			this.potentials[n-1][13] = 1.0;
-			this.potentials[n-1][17] = 1.0;
-		}
 	}
 }
 
@@ -247,6 +188,7 @@ class FollowRoot extends EdgeFeature {
 
   public FollowRoot() {
     this.name = "FollowRoot";
+    this.potentials = Constant.SamePtl;
   }
 
 	public void extract(ArrayList<Node> nodes) {
@@ -260,15 +202,6 @@ class FollowRoot extends EdgeFeature {
 			if (curNode.label == rootNode.label)
 				this.values[n-1] = 1.0;
 			else this.values[n-1] = 0.0;
-		}
-		// compute potentials
-		this.potentials = new double[nodes.size()-1][this.choiceNum*3*3];
-		for (int n = 1; n < nodes.size(); n++) {
-			for (int p = 0; p < this.choiceNum * 3 * 3; p++)
-				this.potentials[n - 1][p] = Constant.minPtl;
-			this.potentials[n-1][9] = 1.0;
-			this.potentials[n-1][13] = 1.0;
-			this.potentials[n-1][17] = 1.0;
 		}
 	}
 }

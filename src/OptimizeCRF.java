@@ -74,7 +74,7 @@ public class OptimizeCRF implements ByGradientValue {
         for (int n = 0; n < nodeCount; n++) {
           int x = thread.nodeFeatures[i].x[n];
           int ptlIndex = x * 3 + it.assignment().get(labelVar[n]);
-          oneExp += thread.nodeFeatures[i].potentials[n][ptlIndex] * params[i];
+          oneExp += thread.nodeFeatures[i].potentials[ptlIndex] * params[i];
         }
       }
       for (int i = 0; i < edgeFeatureNum; i++) {
@@ -82,7 +82,7 @@ public class OptimizeCRF implements ByGradientValue {
           int x = thread.edgeFeatures[i].x[n];
           int ptlIndex = x * 9 + it.assignment().get(labelVar[thread.nodes.get(n+1).parent]) * 3 +
               it.assignment().get(labelVar[n+1]);
-          oneExp += thread.edgeFeatures[i].potentials[n][ptlIndex] * params[i+nodeFeatureNum];
+          oneExp += thread.edgeFeatures[i].potentials[ptlIndex] * params[i + nodeFeatureNum];
         }
       }
       result += Math.exp(oneExp);
@@ -156,8 +156,8 @@ public class OptimizeCRF implements ByGradientValue {
         single = inf.lookupMarginal(y.get(n));
         int x = feature.x[n];
         for (int a = 0; a < 3; a++) {
-          if (feature.potentials[n][x * 3 + a] > 0)
-            modelExpec[i] += single.value(new Assignment(y.get(n), a)) * feature.potentials[n][x * 3 + a];
+          if (feature.potentials[x * 3 + a] > 0)
+            modelExpec[i] += single.value(new Assignment(y.get(n), a)) * feature.potentials[x * 3 + a];
         }
       }
     }
@@ -174,9 +174,9 @@ public class OptimizeCRF implements ByGradientValue {
         Factor tripple = inf.lookupMarginal(new HashVarSet(varList));
         int x = feature.x[e];
         for (int a = 0; a < 9; a++) {
-          if (feature.potentials[e][x * 9 + a] > 0)
+          if (feature.potentials[x * 9 + a] > 0)
             modelExpec[i + nodeFeatureNum] +=
-                tripple.value(new Assignment(varList, new int[]{x, a / 3, a % 3})) * feature.potentials[e][x * 9 + a];
+                tripple.value(new Assignment(varList, new int[]{x, a / 3, a % 3})) * feature.potentials[x * 9 + a];
         }
       }
     }
@@ -338,8 +338,8 @@ public class OptimizeCRF implements ByGradientValue {
   }
 
   public static void main(String[] args) {
-    trainCRF(2);
-    //testCRF(1);
+    //trainCRF(2);
+    testCRF(2);
   }
 
 }

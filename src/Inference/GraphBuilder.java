@@ -31,11 +31,11 @@ public class GraphBuilder {
                 });
 
                 // potentialValue
-                int potentialLength = nodeFeature.potentials[j].length;
+                int potentialLength = nodeFeature.potentials.length;
                 double[] potentialValue = new double[potentialLength];
                 for (int t = 0; t < potentialLength; t++) {
                     // param times potential
-                    potentialValue[t] = params[i] * nodeFeature.potentials[j][t];
+                    potentialValue[t] = params[i] * nodeFeature.potentials[t];
                 }
                 Factor factor = new TableFactor(varSet, potentialValue);
                 mdl.addFactor(factor);
@@ -63,11 +63,11 @@ public class GraphBuilder {
                     y.get(thread.nodes.get(j).parent),
                     y.get(j)
                 });
-                int potentialLength = edgeFeature.potentials[j - 1].length;
+                int potentialLength = edgeFeature.potentials.length;
                 double[] potentialValue = new double[potentialLength];
                 for (int t = 0; t < potentialLength; t++) {
                     // param times potential
-                    potentialValue[t] = params[i] * edgeFeature.potentials[j - 1][t];
+                    potentialValue[t] = params[i] * edgeFeature.potentials[t];
                 }
                 Factor factor = new TableFactor(varSet, potentialValue);
                 mdl.addFactor(factor);
