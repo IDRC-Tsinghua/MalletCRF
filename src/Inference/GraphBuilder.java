@@ -79,33 +79,6 @@ public class GraphBuilder {
         }
       return mdl;
     }
-
-
-    /*
-    public void inference(FactorGraph mdl, Thread thread) {
-
-        Inferencer inf = new JunctionTreeInferencer();
-        inf.computeMarginals(mdl);
-        int nodeFeatureNum = thread.nodeFeatureNum;
-        int edgeFeatureNum = thread.edgeFeatureNum;
-        int nodeSize = thread.nodes.size();
-        for(int n = 0; n < nodeFeatureNum; n++) {
-
-            NodeFeature nodeFeature = thread.nodeFeatures[n];
-            for(int j = 0; j < nodeSize; j++) {
-                // Factor single = inf.lookupMarginal()
-            }
-
-        }
-
-        for(int e = 1; e < edgeFeatureNum; e++) {
-
-
-        }
-
-    }
-    */
-
     public static void main(String[] args) {
 
 
