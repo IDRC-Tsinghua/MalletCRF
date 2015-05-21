@@ -338,8 +338,8 @@ public class OptimizeCRF implements ByGradientValue {
   }
 
   public static void main(String[] args) {
-    //trainCRF(2);
-    testCRF(2);
+    trainCRF(3);
+    //testCRF(2);
   }
 
 }

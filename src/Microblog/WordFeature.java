@@ -44,20 +44,18 @@ public class WordFeature extends NodeFeature {
       }
     }
     // compute potentials
-    this.potentials = new double[this.choiceNum * 3];
-    for (int p = 0; p < this.choiceNum * 3; p++)
-      this.potentials[p] = Constant.minPtl;
     switch (this.polarity) {
       case 0:
-        this.potentials[3] = 1.0;
+        this.potentials = Constant.Word0Ptl;
         break;
       case 1:
-        this.potentials[4] = 1.0;
+        this.potentials = Constant.Word1Ptl;
         break;
       case 2:
-        this.potentials[5] = 1.0;
+        this.potentials = Constant.Word2Ptl;
         break;
       default: // should never be reached
+        this.potentials = Constant.Word1Ptl;
         break;
     }
   }

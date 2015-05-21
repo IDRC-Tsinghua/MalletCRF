@@ -39,6 +39,21 @@ public class Constant {
         Constant.minPtl, Constant.minPtl, 1.0
     };
 
+    public static double[] Word2Ptl = new double[]{
+        Constant.minPtl, Constant.minPtl, Constant.minPtl,
+        Constant.minPtl, Constant.minPtl, 1.0
+    };
+
+    public static double[] Word1Ptl = new double[]{
+        Constant.minPtl, Constant.minPtl, Constant.minPtl,
+        Constant.minPtl, 1.0, Constant.minPtl
+    };
+
+    public static double[] Word0Ptl = new double[]{
+        Constant.minPtl, Constant.minPtl, Constant.minPtl,
+        1.0, Constant.minPtl, Constant.minPtl
+    };
+
     public static double[] PositiveWordPtl = new double[]{
         Constant.minPtl, Constant.minPtl, Constant.minPtl,
         Constant.minPtl, Constant.minPtl, 1.0,

@@ -21,6 +21,9 @@ public class GraphBuilder {
         for(int i=0; i<thread.nodeFeatures.length; i++) {
             // for each node
             NodeFeature nodeFeature = thread.nodeFeatures[i];
+            // potentialValue
+            int potentialLength = nodeFeature.potentials.length;
+            double[] potentialValue = new double[potentialLength];
             for(int j=0; j<thread.nodes.size(); j++) {
                 // exclude factors of wordFeature when x=0, for the efficiency concerns
                 if (i > 0 && nodeFeature.x[j] == 0)
@@ -30,9 +33,6 @@ public class GraphBuilder {
                     y.get(j)
                 });
 
-                // potentialValue
-                int potentialLength = nodeFeature.potentials.length;
-                double[] potentialValue = new double[potentialLength];
                 for (int t = 0; t < potentialLength; t++) {
                     // param times potential
                     potentialValue[t] = params[i] * nodeFeature.potentials[t];
