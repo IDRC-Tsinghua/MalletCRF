@@ -46,3 +46,29 @@ class NodeEmoji extends NodeFeature {
     this.extract(nodes);
   }
 }
+
+class SVMLabel extends NodeFeature {
+
+  public SVMLabel() {
+    this.name = "SVMLabel";
+    this.choiceNum = 3;
+    this.potentials = Constant.SVMLabelPtl; // could be adjusted
+  }
+
+  public void extract(ArrayList<Node> nodes) {
+    this.x = new int[nodes.size()];
+    this.values = new double[nodes.size()];
+    for (int n = 0; n < nodes.size(); n++) {
+      Node node = nodes.get(n);
+      this.x[n] = node.svm;
+      if (node.svm == node.label)
+        this.values[n] = 1.0;
+      else
+        this.values[n] = 0.0;
+    }
+  }
+
+  public void extract(ArrayList<Node> nodes, ArrayList<Integer> words) {
+    this.extract(nodes);
+  }
+}

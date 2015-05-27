@@ -39,6 +39,12 @@ public class Constant {
         Constant.minPtl, Constant.minPtl, 1.0
     };
 
+  public static double[] SVMLabelPtl = new double[]{
+      1.0, Constant.minPtl, Constant.minPtl,
+      Constant.minPtl, 1.0, Constant.minPtl,
+      Constant.minPtl, Constant.minPtl, 1.0
+  };
+
     public static double[] Word2Ptl = new double[]{
         Constant.minPtl, Constant.minPtl, Constant.minPtl,
         Constant.minPtl, Constant.minPtl, 1.0

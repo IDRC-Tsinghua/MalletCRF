@@ -13,6 +13,7 @@ public class Node {
   public int parent;
   public int[] children;
   public int label;
+  public int svm;
   public String[] mention;
   public String[] hashtag;
   public String[] emoji;
@@ -25,7 +26,8 @@ public class Node {
       parent = obj.getInt("parent");
       number = obj.getInt("docid");
       label = obj.getInt("label") + 1;
-      //depth = obj.getInt("depth");
+      svm = obj.getInt("svm");
+      depth = obj.getInt("depth");
       JSONArray mentionArray = obj.getJSONArray("mention");
       mention = new String[mentionArray.length()];
       for (int i = 0; i < mentionArray.length(); i++)
