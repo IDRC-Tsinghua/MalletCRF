@@ -26,7 +26,7 @@ public class Node {
       parent = obj.getInt("parent");
       number = obj.getInt("docid");
       label = obj.getInt("label") + 1;
-      svm = obj.getInt("svm");
+      svm = obj.getInt("svm") - 1;
       depth = obj.getInt("depth");
       JSONArray mentionArray = obj.getJSONArray("mention");
       mention = new String[mentionArray.length()];

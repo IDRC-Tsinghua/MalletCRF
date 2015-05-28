@@ -9,13 +9,13 @@ public class DataSet {
   public int featureNum;
   public int nodeFeatureNum;
   public int edgeFeatureNum;
-  //public String[] nodeFeatureNames = new String[]{"NodeEmoji", "PositiveWord", "NeutralWord", "NegativeWord"};
-  public String[] nodeFeatureNames = new String[]{"NodeEmoji", "SVMLabel"};
-  public String[] edgeFeatureNames = new String[]{"SameAuthor", "Similarity", "Difference",
-      "SentimentProp", "AuthorRef", "HashTag", "SameEmoji", "FollowRoot"};
-  public int posDictLength = 345;
-  public int neuDictLength = 335;
-  public int negDictLength = 328;
+  public String[] nodeFeatureNames = new String[]{"NodeEmoji", "PositiveWord", "NeutralWord",
+      "NegativeWord"};
+  public String[] edgeFeatureNames = new String[]{"SameAuthor", "Similarity", "SentimentProp",
+      "AuthorRef", "HashTag", "SameEmoji"};
+  public int posDictLength = 1300;
+  public int neuDictLength = 1006;
+  public int negDictLength = 631;
   ArrayList<Integer> positiveWords = new ArrayList<>();
   ArrayList<Integer> neutralWords = new ArrayList<>();
   ArrayList<Integer> negativeWords = new ArrayList<>();

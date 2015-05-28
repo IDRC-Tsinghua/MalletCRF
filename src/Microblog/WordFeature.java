@@ -87,7 +87,7 @@ abstract class SentimentWord extends NodeFeature {
         if (words.contains(i))
           this.x[n] += 1;
       }
-      this.x[n] = Math.min(10, this.x[n]);
+      this.x[n] = Math.min(9, this.x[n]);
     }
     // compute values
     this.values = new double[nodes.size()];
