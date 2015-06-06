@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by wyc on 2015/5/6.
  */
 public class DataReader {
-  public Thread[] readData(String[] paths, int limit) {
+  public Thread[] readData(String[] paths, int limit, int partition) {
     ArrayList<Thread> dataset = new ArrayList<>();
     for (String path : paths) {
       System.out.println(path);
@@ -46,6 +46,13 @@ public class DataReader {
       }
       dataset.add(new Thread(preThreadID, nodes)); // add the last thread
     }
-    return dataset.toArray(new Thread[dataset.size()]);
+    if (partition >= 5)
+      return dataset.toArray(new Thread[dataset.size()]);
+    ArrayList<Thread> partDataset = new ArrayList<>();
+    for (int i = 0; i < dataset.size(); i++) {
+      if (i % 5 < partition)
+        partDataset.add(dataset.get(i));
+    }
+    return partDataset.toArray(new Thread[partDataset.size()]);
   }
 }

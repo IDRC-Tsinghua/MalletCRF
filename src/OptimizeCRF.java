@@ -9,8 +9,6 @@ import cc.mallet.optimize.Optimizable.ByGradientValue;
 import cc.mallet.optimize.OptimizationException;
 import cc.mallet.optimize.Optimizer;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.HashMap;
 
 
@@ -205,7 +203,7 @@ public class OptimizeCRF implements ByGradientValue {
     System.out.println("finish getValueGradient");
   }
 
-  static void trainCRF(int fold) {
+  static double[] trainCRF(int fold, int partition) {
     System.out.println("==========Reading Data==========");
     DataReader dataReader = new DataReader();
     int[] folds = new int[4];
@@ -218,7 +216,7 @@ public class OptimizeCRF implements ByGradientValue {
     }
     String[] trainFolds = {"data/weibo/fold_" + folds[0], "data/weibo/fold_" + folds[1],
         "data/weibo/fold_" + folds[2], "data/weibo/fold_" + folds[3]};
-    Thread[] threads = dataReader.readData(trainFolds, 6);
+    Thread[] threads = dataReader.readData(trainFolds, 6, partition);
     DataSet dataset = new DataSet(threads);
     System.out.println(dataset.getThreadNum());
 
@@ -244,27 +242,17 @@ public class OptimizeCRF implements ByGradientValue {
     System.out.println("converged: " + converged);
     for (int p = 0; p < crf.getNumParameters(); p++)
       System.out.println(crf.getParameter(p));
+
+    return crf.params;
   }
 
-  static void testCRF(int fold) {
+  static void testCRF(int fold, double[] params) {
     DataReader dataReader = new DataReader();
-    Thread[] threads = dataReader.readData(new String[]{"data/weibo/fold_" + fold}, 30);
+    Thread[] threads = dataReader.readData(new String[]{"data/weibo/fold_" + fold}, 30, 5);
     DataSet dataset = new DataSet(threads);
     System.out.println(dataset.getThreadNum());
     dataset.extractFeatures();
-    double[] params = new double[dataset.featureNum];
-    try {
-      BufferedReader br = new BufferedReader(new FileReader("data/params.txt"));
-      String line;
-      int p = 0;
-      while ((line = br.readLine()) != null) {
-        params[p] = Double.parseDouble(line.trim());
-        p++;
-      }
-      br.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+
     int correctNum = 0;
     int totalNum = 0;
     FactorGraph graph;
@@ -338,13 +326,9 @@ public class OptimizeCRF implements ByGradientValue {
   }
 
   public static void main(String[] args) {
-    /*System.out.println(args[0] + args[1]);
-    if (args[0].equals("train")) {
-      trainCRF(Integer.parseInt(args[1]));
-    } else if (args[0].equals("test")) {
-      testCRF(Integer.parseInt(args[1]));
-    }*/
-    testCRF(4);
+    System.out.println(args[0] + args[1]);
+    double[] params = trainCRF(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+    testCRF(Integer.parseInt(args[0]), params);
   }
 
 }
